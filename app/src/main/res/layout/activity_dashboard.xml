@@ -17,5 +17,14 @@
         android:gravity="center"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/authname"
+        android:text="Sign Out"
+        android:id="@+id/sout"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
 
 </RelativeLayout>
