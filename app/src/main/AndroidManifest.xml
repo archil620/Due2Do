@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".create1" />
+        <activity android:name=".create2"/>
     </application>
 
 </manifest>
