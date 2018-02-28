@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="due2do.mobile.com.duetodo.to_do">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:background="@color/colorDarkSlateGray">
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/user_image" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView"
+        android:text="@string/username"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textColor="@color/colorGlitter"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/colorGlitter">
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/toolbar2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30sp"
+            android:text="@string/to_do"
+            android:textAlignment="center"
+            android:textColor="@color/colorCyan"
+            android:textSize="25sp"
+            android:id="@+id/button" />
+
+        <Button
+            android:id="@+id/done"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/toolbar2"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:text="@string/done"
+            android:textAlignment="center"
+            android:textColor="@color/colorLightSteelBlue"
+            android:textSize="25sp" />
+    </android.support.v7.widget.Toolbar>
+
+
+    <TextView
+        android:id="@+id/TaskTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar2"
+        android:text="@string/task_name"
+        android:textColor="#2A4D69"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/TaskTitle"
+        android:text="@string/date_time"
+        android:textColor="#4B86B4"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/date"
+        android:text="@string/priority"
+        android:textColor="#4B86B4"
+        android:textSize="15sp" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="28dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/colorLightSteelBlue"
+        app:backgroundTint="@color/colorDarkSlateGray"
+        app:srcCompat="@android:drawable/ic_input_add"
+
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/floatingActionButton"
+        android:layout_alignStart="@+id/floatingActionButton"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/colorLightSteelBlue"
+        android:visibility="invisible"
+        app:backgroundTint="@color/colorDarkSlateGray"
+        app:srcCompat="@android:drawable/ic_menu_today"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/floatingActionButton4"
+        android:layout_alignStart="@+id/floatingActionButton4"
+        android:layout_marginBottom="14dp"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_menu_mapmode"
+        android:focusable="true"
+        android:tint="@color/colorLightSteelBlue"
+        android:visibility="invisible"
+        app:backgroundTint="@color/colorDarkSlateGray"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/floatingActionButton5"
+        android:layout_alignStart="@+id/floatingActionButton5"
+        android:layout_marginBottom="19dp"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/colorDarkSlateGray"
+        android:visibility="invisible"
+        android:tint="@color/colorLightSteelBlue" android:focusable="true"/>
+
+</RelativeLayout>

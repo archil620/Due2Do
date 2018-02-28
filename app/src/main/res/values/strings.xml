@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Due-2-Do</string>
+    <string name="username">Username</string>
+    <string name="task_name">Task Name</string>
+    <string name="user_image">TODO</string>
+    <string name="date_time">Date Time</string>
+    <string name="address">Address</string>
+    <string name="priority">Priority</string>
+    <string name="to_do">To Do</string>
+    <string name="done">Done</string>
+    <string name="tasknamelabel">Task Name</string>
+    <string name="datelabel">Date</string>
+    <string name="add_new_title">ADD NEW</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="add_location">Add Location</string>
+    <string name="add_task">Add Task</string>
+    <string name="addressfield">Name</string>
+    <string name="title_activity_to_do">to_do</string>
+
 </resources>

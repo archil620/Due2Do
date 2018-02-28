@@ -2,5 +2,10 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#2A4D69</color>
+    <color name="colorGlitter">#E7EFF6</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="colorDarkSlateGray">#2A4D69</color>
+    <color name="colorLightSteelBlue">#ADCBE3</color>
+    <color name="colorCyan">#4B86B4</color>
 </resources>
