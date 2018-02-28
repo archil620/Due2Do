@@ -63,7 +63,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         final TimePickerDialog timePickerDialog = new TimePickerDialog(this, AddTask.this, hour, minute, DateFormat.is24HourFormat(this));
         timePickerDialog.show();
 
-        indate.setText(String.valueOf(year) + "/" + String .valueOf(month) + "/" + String.valueOf(dayOfMonth));
+        indate.setText("Date:" + String.valueOf(year) + "/" + String .valueOf(month) + "/" + String.valueOf(dayOfMonth));
 
 
     }
@@ -76,7 +76,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     task.setHours(String.valueOf(hourOfDay));
     task.setMinutes(String.valueOf(minute));
 
-        intime.setText(String.valueOf(hourOfDay) + ":" + String .valueOf(minute));
+        intime.setText("Time:" + String.valueOf(hourOfDay) + ":" + String .valueOf(minute));
 
 
     }
