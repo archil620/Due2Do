@@ -105,7 +105,7 @@ public class MapsReminder extends FragmentActivity implements OnMapReadyCallback
                             .center(latLng)
                             .radius(100)
                             .fillColor(0x40ff0000)  //semi-transparent
-                            .strokeColor(Color.BLUE)
+                            .strokeColor(Color.RED)
                             .strokeWidth(5);
                     mMap.addCircle(circleOptions);
                     ltl = latLng;
@@ -138,7 +138,6 @@ public class MapsReminder extends FragmentActivity implements OnMapReadyCallback
                 taskName.setText("");
                 mMap.clear();
                 onMapReady(mMap);
-
             }
         });
     }
