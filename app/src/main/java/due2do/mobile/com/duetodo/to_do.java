@@ -92,14 +92,15 @@ public class to_do extends AppCompatActivity {
             }
         });
 
+        //Read From Firebase Database
         readRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     CameraReminder camrem = new CameraReminder();
                     camrem = ds.getValue(CameraReminder.class);
-                    taskName.setText(String.valueOf(camrem.getTask()) + " ");
-                    taskDate.setText(String.valueOf(camrem.getYear() + "/" + camrem.getMonth() + "/" + camrem.getDay() + " " + camrem.getHour() + ":" + camrem.getMinute()) + " " );
+                    taskName.setText(String.valueOf(camrem.getTask()));
+                    taskDate.setText(String.valueOf(camrem.getYear() + "/" + camrem.getMonth() + "/" + camrem.getDay() + " " + camrem.getHour() + ":" + camrem.getMinute()));
                 }
             }
 
