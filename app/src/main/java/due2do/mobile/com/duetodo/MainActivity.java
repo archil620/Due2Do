@@ -1,5 +1,17 @@
 package due2do.mobile.com.duetodo;
 
+/* References
+[1] “Authenticate Using Google Sign-In on Android  |  Firebase,” Google. [Online].
+    Available: https://firebase.google.com/docs/auth/android/google-signin?authuser=0. [Accessed: 28-Feb-2018].
+
+[2] akshayejh, “Android Studio Tutorial - Google Sign In - Firebase Authentication - Part 16,” YouTube, 22-Aug-2016.
+    [Online]. Available: https://www.youtube.com/watch?v=-ywVw2O1pP8. [Accessed: 28-Feb-2018].
+
+[3] Firebase, “firebase/quickstart-android,” GitHub. [Online]. Available:
+    https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/GoogleSignInActivity.java#L87-L93.
+    [Accessed: 28-Feb-2018].
+ */
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;

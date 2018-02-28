@@ -1,5 +1,12 @@
 package due2do.mobile.com.duetodo;
 
+/* References
+[1] “Getting user name, lastname and ID in Firebase,” android -
+    Getting user name, lastname and ID in Firebase - Stack Overflow. [Online].
+    Available: https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase.
+    [Accessed: 28-Feb-2018].
+ */
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
