@@ -64,7 +64,7 @@ public class to_do extends AppCompatActivity {
         fab_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(to_do.this, create2.class));
+                startActivity(new Intent(to_do.this, locationbasedmain.class));
             }
         });
 
