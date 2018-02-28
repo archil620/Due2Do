@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Base64;
@@ -40,14 +41,11 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
 
     Button taskbtn;
     ImageButton btn,capture;
-    /*TextView taskView;
-    TextView dateView;
-    TextView timeView;*/
-    String pictureImagePath = null;
     ImageView imageView;
     String encodedImage = null;
     TextView textView;
     CameraReminder cameraReminder = new CameraReminder();
+    File file = null;
 
     private String[] galleryPermissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
     @Override
@@ -60,40 +58,15 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
         capture = findViewById(R.id.capture);
         textView = findViewById(R.id.et);
         imageView = findViewById(R.id.image);
-        /*taskView = findViewById(R.id.showtask);
-        dateView = findViewById(R.id.showdate);
-        timeView = findViewById(R.id.showtime);*/
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
+
         final DatabaseReference myRef = database.getReference();
         final DatabaseReference readRef = database.getReference().child("task");
         readRef.keepSynced(true);
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,CameraActivity.this, 2018, 01, 01);
-
-        //myRef.child("CameraTask");
-
-        /*readRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    CameraReminder camrem = new CameraReminder();
-                    //camrem.setTask(ds.child("message").getValue(CameraReminder.class).getTask());
-                    camrem = ds.getValue(CameraReminder.class);
-                    taskView.append(String.valueOf(camrem.getTask()) + " ");
-                    dateView.append(String.valueOf(camrem.getYear() + "/" + camrem.getMonth() + "/" + camrem.getDay()) + " ");
-                    timeView.append(String.valueOf(camrem.getHour()+ ":" + camrem.getMinute()) + " ");
-                    //camrem.setYear(ds.child("message").getValue(CameraReminder.class).getYear());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +83,14 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
                 cameraReminder.setTask(String.valueOf(textView.getText()));
                 myRef.child("CameraTask").push().setValue(cameraReminder);
                 Toast.makeText(CameraActivity.this,"Task Created",Toast.LENGTH_SHORT).show();
+                Intent displayTask = new Intent(CameraActivity.this,to_do.class);
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getTask()));
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getYear()));
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getMonth()));
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getDay()));
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getHour()));
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getMinute()));
+                startActivity(displayTask);
 
             }
         });
@@ -117,21 +98,13 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String imageFileName = "image.jpg";
-                File storageDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
-                pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
-                File file = new File(pictureImagePath);
-                Uri outputUri = Uri.fromFile(file);
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
-                startActivityForResult(intent, 1);
+                Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+                Uri uri = FileProvider.getUriForFile(CameraActivity.this, getApplicationContext().getPackageName() + ".provider", file);
+                m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(m_intent, 1);
             }
         });
-
-    }
-
-    private void showData(DataSnapshot dataSnapshot) {
 
     }
 
@@ -157,8 +130,9 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (EasyPermissions.hasPermissions(this, galleryPermissions)) {
-            File imageFile = new File(pictureImagePath);
+            File imageFile = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
             if (imageFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
