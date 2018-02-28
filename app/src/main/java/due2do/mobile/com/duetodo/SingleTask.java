@@ -39,7 +39,10 @@ public class SingleTask extends AppCompatActivity {
                 singleTime.setText(task_time);
             }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
         });
 
 

@@ -105,7 +105,7 @@ public class MapsReminder extends FragmentActivity implements OnMapReadyCallback
                             .center(latLng)
                             .radius(100)
                             .fillColor(0x40ff0000)  //semi-transparent
-                            .strokeColor(Color.RED)
+                            .strokeColor(Color.BLUE)
                             .strokeWidth(5);
                     mMap.addCircle(circleOptions);
                     ltl = latLng;
