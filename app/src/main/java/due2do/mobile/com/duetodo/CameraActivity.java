@@ -98,6 +98,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*https://stackoverflow.com/questions/47448297/how-to-get-uri-of-captured-photo*/
                 Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
                 Uri uri = FileProvider.getUriForFile(CameraActivity.this, getApplicationContext().getPackageName() + ".provider", file);
@@ -131,6 +132,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /*https://stackoverflow.com/questions/42571558/bitmapfactory-unable-to-decode-stream-java-io-filenotfoundexception*/
         if (EasyPermissions.hasPermissions(this, galleryPermissions)) {
             File imageFile = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
             if (imageFile.exists()) {
