@@ -16,14 +16,14 @@
         android:layout_marginTop="61dp"
         app:srcCompat="@drawable/logo" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="130dp"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:layout_height="30dp"
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signIn"
+        android:background="@drawable/bg"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="106dp"
-        app:srcCompat="@drawable/auth" />
+        android:layout_marginTop="152dp" />
 
 </RelativeLayout>

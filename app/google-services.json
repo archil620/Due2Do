@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "458892985634",
+    "firebase_url": "https://due2do-b.firebaseio.com",
+    "project_id": "due2do-b",
+    "storage_bucket": "due2do-b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458892985634:android:491d0a65b5b5a85d",
+        "android_client_info": {
+          "package_name": "due2do.mobile.com.duetodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458892985634-59g88m8t5ppjgsn25guf3l3dbgkk3ifp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "due2do.mobile.com.duetodo",
+            "certificate_hash": "3ec5a5974749f5ddf73587a636efabbe7fa2b5e8"
+          }
+        },
+        {
+          "client_id": "458892985634-0gmanar6citg8d74ej85njvp662irg0h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcUbkZ9hueXeMVLqGBrca3RhaLdRbv-LU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458892985634-0gmanar6citg8d74ej85njvp662irg0h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
