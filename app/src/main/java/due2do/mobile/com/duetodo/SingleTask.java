@@ -16,6 +16,7 @@ public class SingleTask extends AppCompatActivity {
        private TextView singleTask;
        private TextView singleTime;
        private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +39,7 @@ public class SingleTask extends AppCompatActivity {
                 singleTime.setText(task_time);
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
         });
 
 
