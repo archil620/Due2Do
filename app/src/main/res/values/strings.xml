@@ -17,5 +17,7 @@
     <string name="addressfield">Name</string>
     <string name="title_activity_to_do">to_do</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_maps_reminder">Map</string>
+    <string name="title_activity_track_status">Map</string>
 
 </resources>
