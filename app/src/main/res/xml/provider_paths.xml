@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--https://stackoverflow.com/questions/47448297/how-to-get-uri-of-captured-photo-->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path
         name="external_files"
