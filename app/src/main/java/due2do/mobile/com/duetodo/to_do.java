@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,6 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class to_do extends AppCompatActivity {
 
     FloatingActionButton fab_main, fab_photo, fab_map, fab_simple;
@@ -22,6 +27,11 @@ public class to_do extends AppCompatActivity {
     TextView taskName,taskDate;
     boolean isopen = false;
     CameraReminder cameraReminder = new CameraReminder();
+    RecyclerView recyclerView;
+    ReminderAdapter adapter;
+
+    List<CameraReminder> reminderList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +40,8 @@ public class to_do extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-
         final DatabaseReference readRef = database.getReference().child("CameraTask");
-        readRef.keepSynced(true);
+
 
         fab_main = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         fab_photo = (FloatingActionButton) findViewById(R.id.floatingActionButton4);
@@ -92,16 +101,20 @@ public class to_do extends AppCompatActivity {
             }
         });
 
+        recyclerView = (RecyclerView) findViewById(R.id.recylerView);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //Read From Firebase Database
         readRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    CameraReminder camrem = new CameraReminder();
-                    camrem = ds.getValue(CameraReminder.class);
-                    taskName.setText(String.valueOf(camrem.getTask()));
-                    taskDate.setText(String.valueOf(camrem.getYear() + "/" + camrem.getMonth() + "/" + camrem.getDay() + " " + camrem.getHour() + ":" + camrem.getMinute()));
+                    cameraReminder = ds.getValue(CameraReminder.class);
+                    reminderList.add(cameraReminder);
                 }
+                adapter = new ReminderAdapter(to_do.this, reminderList);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override

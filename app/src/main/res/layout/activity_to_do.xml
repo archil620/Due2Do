@@ -71,36 +71,13 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <TextView
-        android:id="@+id/TaskTitle"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recylerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar2"
-        android:text="@string/task_name"
-        android:textColor="#2A4D69"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar2">
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/TaskTitle"
-        android:text="@string/date_time"
-        android:textColor="#4B86B4"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/priority"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/date"
-        android:text="@string/priority"
-        android:textColor="#4B86B4"
-        android:textSize="15sp" />
+    </android.support.v7.widget.RecyclerView>
 
 
     <android.support.design.widget.FloatingActionButton
