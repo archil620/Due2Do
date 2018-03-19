@@ -22,7 +22,7 @@ import java.util.List;
 
 public class to_do extends AppCompatActivity {
 
-    FloatingActionButton fab_main, fab_photo, fab_map, fab_simple;
+    FloatingActionButton fab_main, fab_photo, fab_map, fab_simple,fab_event;
     Animation fabopen, fabclose, fabrotate, fabantirotate;
     TextView taskName,taskDate;
     boolean isopen = false;
@@ -47,6 +47,7 @@ public class to_do extends AppCompatActivity {
         fab_photo = (FloatingActionButton) findViewById(R.id.floatingActionButton4);
         fab_map = (FloatingActionButton) findViewById(R.id.floatingActionButton5);
         fab_simple = (FloatingActionButton) findViewById(R.id.floatingActionButton6);
+        fab_event = (FloatingActionButton) findViewById(R.id.floatingActionButton7);
         fabopen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation);
         fabclose= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation_close);
         fabrotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
@@ -61,20 +62,24 @@ public class to_do extends AppCompatActivity {
                     fab_photo.startAnimation(fabclose);
                     fab_map.startAnimation(fabclose);
                     fab_simple.startAnimation(fabclose);
+                    fab_event.startAnimation(fabclose);
                     fab_main.startAnimation(fabantirotate);
                     fab_photo.setClickable(false);
                     fab_map.setClickable(false);
                     fab_simple.setClickable(false);
+                    fab_event.setClickable(false);
                     isopen=false;
 
                 }else {
                     fab_photo.startAnimation(fabopen);
                     fab_map.startAnimation(fabopen);
                     fab_simple.startAnimation(fabopen);
+                    fab_event.startAnimation(fabopen);
                     fab_main.startAnimation(fabrotate);
                     fab_photo.setClickable(true);
                     fab_map.setClickable(true);
                     fab_simple.setClickable(true);
+                    fab_event.setClickable(true);
                     isopen=true;
                 }
             }
@@ -100,6 +105,15 @@ public class to_do extends AppCompatActivity {
                 startActivity(new Intent(to_do.this,MainActivity1.class));
             }
         });
+
+        fab_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(to_do.this,Event.class));
+            }
+        });
+
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recylerView);
         recyclerView.setHasFixedSize(true);
