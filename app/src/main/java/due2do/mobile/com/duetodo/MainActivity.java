@@ -21,6 +21,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+/*
+Created by Bhargav Dalal
+References
+[1] “Getting user name, lastname and ID in Firebase,” android -
+    Getting user name, lastname and ID in Firebase - Stack Overflow. [Online].
+    Available: https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase.
+    [Accessed: 28-Feb-2018].
+
+[2] “Authenticate Using Google Sign-In on Android  |  Firebase,” Google. [Online].
+    Available: https://firebase.google.com/docs/auth/android/google-signin?authuser=0. [Accessed: 28-Feb-2018].
+
+[3] akshayejh, “Android Studio Tutorial - Google Sign In - Firebase Authentication - Part 16,” YouTube, 22-Aug-2016.
+    [Online]. Available: https://www.youtube.com/watch?v=-ywVw2O1pP8. [Accessed: 28-Feb-2018].
+
+[4] Firebase, “firebase/quickstart-android,” GitHub. [Online]. Available:
+    https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/GoogleSignInActivity.java#L87-L93.
+    [Accessed: 28-Feb-2018].
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private SignInButton googleBtn;
@@ -29,9 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private String TAG;
     private FirebaseAuth mAuth;
 
-    //https://www.youtube.com/watch?v=-ywVw2O1pP8
-    // https://firebase.google.com/docs/auth/android/google-signin?authuser=0
-    // https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/GoogleSignInActivity.java#L87-L93
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
