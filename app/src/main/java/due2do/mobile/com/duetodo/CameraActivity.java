@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -59,11 +61,18 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
         textView = findViewById(R.id.et);
         imageView = findViewById(R.id.image);
         // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         final DatabaseReference myRef = database.getReference();
         final DatabaseReference readRef = database.getReference().child("task");
-        readRef.keepSynced(true);
+        *///readRef.keepSynced(true);
+
+        final DatabaseReference mDatabaseReference;
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        final FirebaseUser mUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        //final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid()).child("CameraTask");
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,CameraActivity.this, 2018, 01, 01);
@@ -81,7 +90,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
             public void onClick(View view) {
                 //myRef.child("task").setValue()
                 cameraReminder.setTask(String.valueOf(textView.getText()));
-                myRef.child("CameraTask").push().setValue(cameraReminder);
+                mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(cameraReminder);
                 Toast.makeText(CameraActivity.this,"Task Created",Toast.LENGTH_SHORT).show();
                 Intent displayTask = new Intent(CameraActivity.this,to_do.class);
                 displayTask.putExtra("Task", String.valueOf(cameraReminder.getTask()));
@@ -141,7 +150,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
                 myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] byteFormat = stream.toByteArray();
                 encodedImage = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
-                cameraReminder.setEncodedImage(encodedImage);
+                //cameraReminder.setEncodedImage(encodedImage);
                 Bitmap bitmap = Bitmap.createScaledBitmap(myBitmap, 1000, 1000, true);
                 imageView.setImageBitmap(bitmap);
             }
