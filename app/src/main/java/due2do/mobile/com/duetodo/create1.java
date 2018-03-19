@@ -14,7 +14,7 @@ public class create1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create1);
-
+        /*
         addtask = (Button) findViewById(R.id.button2);
 
         addtask.setOnClickListener(new View.OnClickListener() {
@@ -23,5 +23,6 @@ public class create1 extends AppCompatActivity {
                 startActivity(new Intent(create1.this, to_do.class));
             }
         });
+        */
     }
 }
