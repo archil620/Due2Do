@@ -21,13 +21,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <activity android:name=".to_do">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".to_do"/>
         <activity android:name=".create1" />
         <activity android:name=".create2"/>
         <activity
@@ -38,6 +39,7 @@
         <activity android:name=".AddTask" />
         <activity android:name=".SingleTask"></activity>
         <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".Event"></activity>
     </application>
 
 </manifest>
