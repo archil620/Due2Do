@@ -2,6 +2,7 @@ package due2do.mobile.com.duetodo;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
@@ -22,6 +23,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     private FirebaseDatabase database;
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
+    private CameraReminder cameraReminder = new CameraReminder();
     EditText editTask,indate,intime;
     Button btn,addTask;
     Task task = new Task();
@@ -76,7 +78,9 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         timePickerDialog.show();
 
         indate.setText("Date:" + String.valueOf(year) + "/" + String .valueOf(month) + "/" + String.valueOf(dayOfMonth));
-
+        cameraReminder.setYear(String.valueOf(year));
+        cameraReminder.setMonth(String.valueOf(month));
+        cameraReminder.setDay(String.valueOf(dayOfMonth));
 
     }
 
@@ -89,7 +93,8 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     task.setMinutes(String.valueOf(minute));
 
         intime.setText("Time:" + String.valueOf(hourOfDay) + ":" + String .valueOf(minute));
-
+    cameraReminder.setHour(String.valueOf(hourOfDay));
+    cameraReminder.setMinute(String.valueOf(minute));
 
     }
 
@@ -97,9 +102,13 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         editTask= findViewById(R.id.editTask);
         String name= editTask.getText().toString();
         String time = indate.getText().toString() + "  "  + intime.getText().toString();
-
-        DatabaseReference newTask = mDatabaseReference.child(mUser.getUid()).child("SimpleTask").child(name);
+        cameraReminder.setTask(name);
+        /*DatabaseReference newTask = mDatabaseReference.child(mUser.getUid()).child("SimpleTask").child(name);
         newTask.setValue(time);
+*/
+        mDatabaseReference.child(mUser.getUid()).child("SimpleTask").push().setValue(cameraReminder);
+        Intent displayTask = new Intent(AddTask.this,to_do.class);
+        startActivity(displayTask);
 
     }
 }

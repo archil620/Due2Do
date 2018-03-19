@@ -67,7 +67,8 @@ public class to_do extends AppCompatActivity {
         // database
         final FirebaseUser mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid()).child("CameraTask");
+        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
+        final DatabaseReference simpleReadRef = mDatabaseReference.child(mUser.getUid()).child("SimpleTask");
 
 
         fab_main.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +139,14 @@ public class to_do extends AppCompatActivity {
         readRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
+
+                    cameraReminder = ds.getValue(CameraReminder.class);
+                    reminderList.add(cameraReminder);
+                }
+
+                for(DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()){
+
                     cameraReminder = ds.getValue(CameraReminder.class);
                     reminderList.add(cameraReminder);
                 }
