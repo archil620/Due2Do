@@ -6,11 +6,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +26,8 @@ import java.util.List;
 
 public class to_do extends AppCompatActivity {
 
+    private TextView username;
+
     FloatingActionButton fab_main, fab_photo, fab_map, fab_simple,fab_event;
     Animation fabopen, fabclose, fabrotate, fabantirotate;
     TextView taskName,taskDate;
@@ -32,17 +38,15 @@ public class to_do extends AppCompatActivity {
 
     List<CameraReminder> reminderList = new ArrayList<>();
 
+    private DatabaseReference mDatabaseReference;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        final DatabaseReference readRef = database.getReference().child("CameraTask");
-
-
+        username = (TextView) findViewById(R.id.username);
         fab_main = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         fab_photo = (FloatingActionButton) findViewById(R.id.floatingActionButton4);
         fab_map = (FloatingActionButton) findViewById(R.id.floatingActionButton5);
@@ -54,6 +58,17 @@ public class to_do extends AppCompatActivity {
         fabantirotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
         taskName = findViewById(R.id.TaskTitle);
         taskDate = findViewById(R.id.date);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        String name = user.getDisplayName(); // https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase
+        username.setText(name);
+
+        // database
+        final FirebaseUser mUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid()).child("CameraTask");
+
 
         fab_main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +154,20 @@ public class to_do extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_signout){
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(to_do.this, MainActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }
