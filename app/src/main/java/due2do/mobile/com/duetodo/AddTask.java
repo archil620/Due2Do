@@ -11,6 +11,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,7 +20,8 @@ import java.util.Calendar;
 
 public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener{
     private FirebaseDatabase database;
-    private DatabaseReference myRef;
+    private DatabaseReference mDatabaseReference;
+    private FirebaseUser mUser;
     EditText editTask,indate,intime;
     Button btn,addTask;
     Task task = new Task();
@@ -33,6 +36,15 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         addTask = findViewById(R.id.add);
         indate = findViewById(R.id.in_date);
         intime = findViewById(R.id.in_time);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String uid = firebaseAuth.getCurrentUser().getUid();
+
+
+        // database
+        mUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
 
 
         final DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -86,13 +98,8 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         String name= editTask.getText().toString();
         String time = indate.getText().toString() + "  "  + intime.getText().toString();
 
-
-
-        myRef = database.getInstance().getReference().child("Tasks");
-
-        DatabaseReference newTask = myRef.push();
-        newTask.child("name").setValue(name);
-        newTask.child("time").setValue(time);
+        DatabaseReference newTask = mDatabaseReference.child(mUser.getUid()).child("SimpleTask").child(name);
+        newTask.setValue(time);
 
     }
 }
