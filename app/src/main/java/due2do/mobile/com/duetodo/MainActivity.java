@@ -21,6 +21,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+/*
+Created by Bhargav Dalal
+References
+[1] “Getting user name, lastname and ID in Firebase,” android -
+    Getting user name, lastname and ID in Firebase - Stack Overflow. [Online].
+    Available: https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase.
+    [Accessed: 28-Feb-2018].
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private SignInButton googleBtn;
