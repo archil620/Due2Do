@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import due2do.mobile.com.duetodo.R;
 
 public class SingleTask extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+
+import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.model.CameraReminder;
 
 /**
  * Created by Ankit Varshney on 17/03/2018.

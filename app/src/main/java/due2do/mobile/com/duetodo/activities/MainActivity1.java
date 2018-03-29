@@ -2,7 +2,7 @@
 
 *//**
  * Created by Archil on 2018-02-27.
- */package due2do.mobile.com.duetodo;
+ */package due2do.mobile.com.duetodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.model.Task;
 
 public class MainActivity1 extends AppCompatActivity {
 

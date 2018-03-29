@@ -1,7 +1,9 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import due2do.mobile.com.duetodo.R;
 
 public class TrackStatus extends AppCompatActivity {
 

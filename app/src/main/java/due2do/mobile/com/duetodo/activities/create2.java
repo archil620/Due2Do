@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.services.TrackLocationService;
 
 public class create2 extends FragmentActivity implements OnMapReadyCallback {
 

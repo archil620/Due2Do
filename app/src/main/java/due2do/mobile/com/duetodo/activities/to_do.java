@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import due2do.mobile.com.duetodo.model.CameraReminder;
+import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
 
 public class to_do extends AppCompatActivity {
 

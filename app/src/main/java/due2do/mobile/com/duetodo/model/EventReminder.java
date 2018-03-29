@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.model;
 
 /**
  * Created by Abhi on 2018-03-19.
