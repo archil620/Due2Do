@@ -24,25 +24,24 @@ import java.util.Date;
 
 public class MainActivity1 extends AppCompatActivity {
 
-    private RecyclerView mTaskList;
+    //private RecyclerView mTaskList;
     private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_add_task);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mTaskList = findViewById(R.id.task_list);
-        mTaskList.setHasFixedSize(true);
-        mTaskList.setLayoutManager(new LinearLayoutManager(this));
+
+       /* mTaskList.setHasFixedSize(true);
+        mTaskList.setLayoutManager(new LinearLayoutManager(this));*/
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Tasks");
 
-        TextView bannerDay = findViewById(R.id.bannerDay);
-        TextView bannerDate = findViewById(R.id.bannerDate);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+
+        /*SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
         bannerDay.setText(dayOfTheWeek);
@@ -50,7 +49,7 @@ public class MainActivity1 extends AppCompatActivity {
         long date = System.currentTimeMillis();
         SimpleDateFormat sdff = new SimpleDateFormat("MMM MM dd, yyy h:mm a");
         String datestring = sdff.format(date);
-        bannerDate.setText(datestring);
+        bannerDate.setText(datestring);*/
     }
 
     /*public void onClick(View view) {
@@ -117,7 +116,7 @@ public class MainActivity1 extends AppCompatActivity {
             }
         };
 
-        mTaskList.setAdapter(FBRA);
+        /*mTaskList.setAdapter(FBRA);*/
     }
 
     @Override
