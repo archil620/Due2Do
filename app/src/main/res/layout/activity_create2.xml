@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
         android:layout_marginLeft="40dp"
-        tools:context="due2do.mobile.com.duetodo.create2" />
+        tools:context="due2do.mobile.com.duetodo.activities.create2" />
 
     <Button
         android:id="@+id/setTaskBtn"

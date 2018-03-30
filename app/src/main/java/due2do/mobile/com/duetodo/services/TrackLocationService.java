@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.activities.TrackStatus;
 
 public class TrackLocationService extends Service {
 

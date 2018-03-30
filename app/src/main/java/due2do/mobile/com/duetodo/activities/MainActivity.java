@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -20,6 +20,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import due2do.mobile.com.duetodo.R;
 
 /*
 Created by Bhargav Dalal
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(due2do.mobile.com.duetodo.R.layout.activity_main);
 
         googleBtn = (SignInButton)findViewById(R.id.googleBtn);
         // Configure Google Sign In

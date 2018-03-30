@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.model;
 
 /**
  * Created by Archil on 2018-02-10.

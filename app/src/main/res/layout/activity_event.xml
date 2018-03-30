@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="due2do.mobile.com.duetodo.Event">
+    tools:context="due2do.mobile.com.duetodo.activities.Event">
 
     <EditText
         android:id="@+id/eventName"

@@ -1,4 +1,4 @@
-package due2do.mobile.com.duetodo;
+package due2do.mobile.com.duetodo.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,6 +31,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Calendar;
 
+import due2do.mobile.com.duetodo.model.CameraReminder;
+import due2do.mobile.com.duetodo.R;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
