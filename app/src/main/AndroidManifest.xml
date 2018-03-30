@@ -48,11 +48,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAfvURBhIfY7XD17ITT3OFx6EVmcaYNJzM" />
+
         <activity android:name=".activities.create2" />
         <activity
             android:name=".activities.MainActivity1"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.AddTask" />
         <activity android:name=".activities.SingleTask" />
         <activity android:name=".activities.CameraActivity" />
@@ -62,7 +63,18 @@
             android:name=".services.TrackLocationService"
             android:enabled="true"
             android:exported="true" />
-        <activity android:name=".activities.TrackStatus"></activity>
+
+        <activity android:name=".activities.TrackStatus" />
+
+        <receiver android:name=".activities.todoWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/todo_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
