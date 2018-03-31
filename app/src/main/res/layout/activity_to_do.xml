@@ -6,149 +6,121 @@
     android:layout_height="match_parent"
     tools:context="due2do.mobile.com.duetodo.activities.to_do">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:background="@color/colorDarkSlateGray">
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true">
 
-    </android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:background="@color/colorLightSteelBlue">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/user_image" />
+        </android.support.v7.widget.Toolbar>
+
+        <ImageButton
+            android:id="@+id/add_task"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom|right"
+            android:background="@drawable/round_btn"
+            android:contentDescription="TODO"
+            android:src="@drawable/add_task"
+            android:textColor="@color/colorGlitter"
+            android:textSize="18sp" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView"
+        android:layout_alignParentTop="true"
         android:text="@string/username"
         android:textAlignment="center"
+        android:textColor="@color/colorDarkSlateGray"
         android:textSize="30sp"
-        android:textColor="@color/colorGlitter"
         android:textStyle="bold" />
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/colorGlitter">
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/toolbar2"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30sp"
-            android:text="@string/to_do"
-            android:textAlignment="center"
-            android:textColor="@color/colorCyan"
-            android:textSize="25sp"
-            android:id="@+id/button" />
-
-        <Button
-            android:id="@+id/done"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/toolbar2"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:text="@string/done"
-            android:textAlignment="center"
-            android:textColor="@color/colorLightSteelBlue"
-            android:textSize="25sp" />
-    </android.support.v7.widget.Toolbar>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recylerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar2">
-
+        android:layout_below="@+id/frame">
     </android.support.v7.widget.RecyclerView>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+    <TextView
+        android:id="@+id/today"
+        android:layout_width="250dp"
+        android:layout_height="175dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@color/colorDarkSlateGray"
+        android:textSize="40sp" />
+
+    <ImageButton
+        android:id="@+id/previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/username"
+        android:layout_marginTop="17dp"
+        android:background="@drawable/ic_keyboard_previous"
+        />
+
+    <ImageButton
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="25dp"
-        android:layout_marginEnd="28dp"
+        android:layout_alignTop="@+id/previous"
+        android:background="@drawable/ic_navigate_next" />
+
+
+    <ImageButton
+        android:id="@+id/camera_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/frame"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/round_btn2"
         android:clickable="true"
         android:focusable="true"
-        android:tint="@color/colorLightSteelBlue"
-        app:backgroundTint="@color/colorDarkSlateGray"
-        app:srcCompat="@android:drawable/ic_input_add"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/camera_task" />
 
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/floatingActionButton"
-        android:layout_alignStart="@+id/floatingActionButton"
-        android:layout_marginBottom="12dp"
+    <ImageButton
+        android:id="@+id/add_people_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/recylerView"
+        android:layout_alignEnd="@+id/today"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/round_btn2"
         android:clickable="true"
         android:focusable="true"
-        android:tint="@color/colorLightSteelBlue"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorDarkSlateGray"
-        app:srcCompat="@android:drawable/ic_menu_today"
-        />
+        app:srcCompat="@drawable/add_people" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/floatingActionButton4"
-        android:layout_alignStart="@+id/floatingActionButton4"
-        android:layout_marginBottom="14dp"
+    <ImageButton
+        android:id="@+id/location_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/frame"
+        android:layout_toStartOf="@+id/next"
+        android:background="@drawable/round_btn2"
         android:clickable="true"
-        app:srcCompat="@android:drawable/ic_menu_mapmode"
         android:focusable="true"
-        android:tint="@color/colorLightSteelBlue"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorDarkSlateGray"/>
+        app:srcCompat="@drawable/location" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/floatingActionButton5"
-        android:layout_alignStart="@+id/floatingActionButton5"
-        android:layout_marginBottom="19dp"
-        android:clickable="true"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorDarkSlateGray"
-        android:visibility="invisible"
-        android:tint="@color/colorLightSteelBlue" android:focusable="true"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/floatingActionButton6"
-        android:layout_alignStart="@+id/floatingActionButton6"
-        android:layout_marginBottom="19dp"
-        android:clickable="true"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/colorDarkSlateGray"
-        android:visibility="invisible"
-        android:tint="@color/colorLightSteelBlue" android:focusable="true"/>
+
 
 </RelativeLayout>

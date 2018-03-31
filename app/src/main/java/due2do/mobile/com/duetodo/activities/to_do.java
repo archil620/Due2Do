@@ -1,5 +1,6 @@
 package due2do.mobile.com.duetodo.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import due2do.mobile.com.duetodo.model.CameraReminder;
@@ -31,14 +36,16 @@ import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
 public class to_do extends AppCompatActivity {
 
     private TextView username;
-
-    FloatingActionButton fab_main, fab_photo, fab_map, fab_simple,fab_event;
+    TextView td;
+    // FloatingActionButton  fab_photo, fab_map, fab_simple,fab_event;
+    ImageButton add_task, camera_task, location, add_people ;
     Animation fabopen, fabclose, fabrotate, fabantirotate;
     TextView taskName,taskDate;
     boolean isopen = false;
     CameraReminder cameraReminder = new CameraReminder();
     RecyclerView recyclerView;
     ReminderAdapter adapter;
+    ImageButton next, previous;
 
     List<CameraReminder> reminderList = new ArrayList<>();
 
@@ -46,22 +53,65 @@ public class to_do extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
         username = (TextView) findViewById(R.id.username);
-        fab_main = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        fab_photo = (FloatingActionButton) findViewById(R.id.floatingActionButton4);
-        fab_map = (FloatingActionButton) findViewById(R.id.floatingActionButton5);
-        fab_simple = (FloatingActionButton) findViewById(R.id.floatingActionButton6);
-        fab_event = (FloatingActionButton) findViewById(R.id.floatingActionButton7);
+        //fab_main = (FloatingActionButton) findViewById(R.id.add_task);
+        add_task = (ImageButton) findViewById(R.id.add_task);
+        camera_task = (ImageButton) findViewById(R.id.camera_btn);
+        location = (ImageButton) findViewById(R.id.location_btn);
+        add_people = (ImageButton) findViewById(R.id.add_people_btn);
+       // fab_photo = (FloatingActionButton) findViewById(R.id.floatingActionButton4);
+       // fab_map = (FloatingActionButton) findViewById(R.id.floatingActionButton5);
+       // fab_simple = (FloatingActionButton) findViewById(R.id.floatingActionButton6);
+       // fab_event = (FloatingActionButton) findViewById(R.id.floatingActionButton7);
         fabopen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation);
         fabclose= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation_close);
         fabrotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
         fabantirotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
         taskName = findViewById(R.id.TaskTitle);
         taskDate = findViewById(R.id.date);
+        td = findViewById(R.id.today);
+        next = findViewById(R.id.next);
+        previous = findViewById(R.id.previous);
+
+        //to display today's day
+        final java.util.Calendar c = java.util.Calendar.getInstance();
+
+        final SimpleDateFormat d = new SimpleDateFormat("dd");
+        final SimpleDateFormat m = new SimpleDateFormat("MMMM");
+        String cmonth = m.format(c.getTime());
+        String cday = d.format(c.getTime());
+        td.setText(String.valueOf(cmonth + ", " + cday));
+
+        //to go to next date
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.add(Calendar.DATE, 1);
+                String cmonth = m.format(c.getTime());
+                String cday = d.format(c.getTime());
+                td.setText(String.valueOf(cmonth + ", " + cday));
+
+            }
+        });
+
+        //to go to previous date
+        //to go to next date
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.add(Calendar.DATE, -1);
+                String cmonth = m.format(c.getTime());
+                String cday = d.format(c.getTime());
+                td.setText(String.valueOf(cmonth + ", " + cday));
+
+            }
+        });
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid = user.getUid();
@@ -75,58 +125,51 @@ public class to_do extends AppCompatActivity {
         final DatabaseReference simpleReadRef = mDatabaseReference.child(mUser.getUid()).child("SimpleTask");
 
 
-        fab_main.setOnClickListener(new View.OnClickListener() {
+        add_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isopen){
-                    fab_photo.startAnimation(fabclose);
-                    fab_map.startAnimation(fabclose);
-                    fab_simple.startAnimation(fabclose);
-                    fab_event.startAnimation(fabclose);
-                    fab_main.startAnimation(fabantirotate);
-                    fab_photo.setClickable(false);
-                    fab_map.setClickable(false);
-                    fab_simple.setClickable(false);
-                    fab_event.setClickable(false);
+
+                    location.startAnimation(fabclose);
+                    camera_task.startAnimation(fabclose);
+                    add_people.startAnimation(fabclose);
+                   // fab_main.startAnimation(fabantirotate);
+                    location.setClickable(false);
+                    camera_task.setClickable(false);
+                    add_people.setClickable(false);
                     isopen=false;
 
                 }else {
-                    fab_photo.startAnimation(fabopen);
-                    fab_map.startAnimation(fabopen);
-                    fab_simple.startAnimation(fabopen);
-                    fab_event.startAnimation(fabopen);
-                    fab_main.startAnimation(fabrotate);
-                    fab_photo.setClickable(true);
-                    fab_map.setClickable(true);
-                    fab_simple.setClickable(true);
-                    fab_event.setClickable(true);
+
+                    location.startAnimation(fabopen);
+                    camera_task.startAnimation(fabopen);
+                    add_people.startAnimation(fabopen);
+                    //fab_main.startAnimation(fabrotate);
+
+                    location.setClickable(true);
+                    camera_task.setClickable(true);
+                    add_people.setClickable(true);
                     isopen=true;
                 }
             }
         });
 
-        fab_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(to_do.this, CameraActivity.class));
-            }
-        });
 
-        fab_map.setOnClickListener(new View.OnClickListener() {
+        location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(to_do.this, create2.class));
             }
         });
 
-        fab_simple.setOnClickListener(new View.OnClickListener() {
+        camera_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(to_do.this,AddTask.class));
             }
         });
 
-        fab_event.setOnClickListener(new View.OnClickListener() {
+        add_people.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(to_do.this,Event.class));
