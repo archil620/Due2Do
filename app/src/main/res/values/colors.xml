@@ -8,4 +8,7 @@
     <color name="colorDarkSlateGray">#2A4D69</color>
     <color name="colorLightSteelBlue">#ADCBE3</color>
     <color name="colorCyan">#4B86B4</color>
+    <color name="pink">#FF69B4</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#FF000000</color>
 </resources>

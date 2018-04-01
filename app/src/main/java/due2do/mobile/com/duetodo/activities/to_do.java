@@ -32,6 +32,7 @@ import java.util.List;
 import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
+import due2do.mobile.com.duetodo.model.Task;
 
 public class to_do extends AppCompatActivity {
 
@@ -42,12 +43,12 @@ public class to_do extends AppCompatActivity {
     Animation fabopen, fabclose, fabrotate, fabantirotate;
     TextView taskName,taskDate;
     boolean isopen = false;
-    CameraReminder cameraReminder = new CameraReminder();
+    Task reminder = new Task();
     RecyclerView recyclerView;
     ReminderAdapter adapter;
     ImageButton next, previous;
 
-    List<CameraReminder> reminderList = new ArrayList<>();
+    List<Task> reminderList = new ArrayList<>();
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -188,14 +189,14 @@ public class to_do extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
 
-                    cameraReminder = ds.getValue(CameraReminder.class);
-                    reminderList.add(cameraReminder);
+                    reminder = ds.getValue(Task.class);
+                    reminderList.add(reminder);
                 }
 
                 for(DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()){
 
-                    cameraReminder = ds.getValue(CameraReminder.class);
-                    reminderList.add(cameraReminder);
+                    reminder = ds.getValue(Task.class);
+                    reminderList.add(reminder);
                 }
                 adapter = new ReminderAdapter(to_do.this, reminderList);
                 recyclerView.setAdapter(adapter);

@@ -20,12 +20,12 @@
         <!-- https://stackoverflow.com/questions/47448297/how-to-get-uri-of-captured-photo -->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="due2do.mobile.com.duetodo"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
+                android:resource="@xml/provider_paths"></meta-data>
         </provider>
 
         <activity android:name=".activities.MainActivity">
