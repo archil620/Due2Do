@@ -50,9 +50,18 @@
                 android:layout_height="50dp"
                 android:layout_above="@+id/priority"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="16dp"
                 android:background="@null"
                 android:src="@drawable/ic_delete" />
+
+            <ImageButton
+                android:id="@+id/editEvent"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="32dp"
+                android:background="@null"
+                android:src="@drawable/ic_edit" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
