@@ -1,63 +1,141 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="due2do.mobile.com.duetodo.activities.Event">
+    tools:context=".activities.create2"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/eventName"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Event Name"
-        android:textSize="24sp" />
+        android:layout_height="200dp">
 
-    <ImageButton
-        android:id="@+id/cal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/eventName"
-        android:layout_marginStart="33dp"
-        android:src="@drawable/cal"
-        android:layout_toEndOf="@+id/dateLabel" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="25dp"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dateLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/eventName"
-        android:text="Date"
-        android:textSize="24sp" />
+            <EditText
+                android:id="@+id/eventName"
+                android:layout_width="350dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="28dp"
+                android:background="@null"
+                android:hint="Remind me for..."
+                android:theme="@style/MyEditText"
+                android:inputType="textCapSentences"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/dateimage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="14dp"
+                    android:src="@drawable/ic_date_range" />
+
+                <TextView
+                    android:id="@+id/storedate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:clickable="true"
+                    android:hint="00:00"
+                    android:textSize="20dp" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/timeimage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/ic_access_alarm" />
+
+                <TextView
+                    android:id="@+id/storetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:clickable="true"
+                    android:hint="00:00"
+                    android:textSize="20dp" />
 
 
-    <Button
-        android:id="@+id/btpick_contact"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/priorityimage"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/ic_priority" />
+
+                <Spinner
+                    android:id="@+id/priority"
+                    android:layout_marginTop="23dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--https://stackoverflow.com/questions/9884202/custom-circle-button-->
+        <!--https://stackoverflow.com/questions/23921153/how-can-i-position-a-button-in-between-two-layouts-->
+        <ImageButton
+            android:id="@+id/createtask"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/priorityimage"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ic_check"
+            android:text="@android:string/ok"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cal"
-        android:text="Select contact"
-        android:layout_gravity="center">
-    </Button>
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/txtPhoneNo"
-        android:layout_below="@+id/btpick_contact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Phone Number" />
-    <Button
-        android:id="@+id/btnSend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
-        android:text="Send SMS" />
+        <Button
+            android:id="@+id/btnpick_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Members" />
 
+        <EditText
+            android:id="@+id/meeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter place to meet"
+            android:inputType="textCapSentences"
+            android:layout_below="@+id/btnpick_contact"/>
 
-</RelativeLayout>
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/meeting"
+            android:drawSelectorOnTop="false"
+            tools:ignore="UnknownId" />
+
+    </RelativeLayout>
+
+</LinearLayout>
