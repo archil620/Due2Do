@@ -1,5 +1,6 @@
 package due2do.mobile.com.duetodo.activities;
 
+import android.app.ListActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.DatePickerDialog;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,13 +34,14 @@ import java.util.Calendar;
 import due2do.mobile.com.duetodo.model.EventReminder;
 import due2do.mobile.com.duetodo.R;
 
-public class Event extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class Event extends ListActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     TextView time, date;
     ImageButton btn, createtask;
     private final int REQUEST_CODE = 99;
     EditText eventName, location;
-    Button btPick, btnSend;
+    Button btPick;
+
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     EventReminder eventReminder = new EventReminder();
@@ -58,9 +61,13 @@ public class Event extends AppCompatActivity implements DatePickerDialog.OnDateS
         eventName = findViewById(R.id.eventName);
         btn = findViewById(R.id.cal);
         btPick = findViewById(R.id.btnpick_contact);
-        btnSend = findViewById(R.id.btnSend);
         location = (EditText) findViewById(R.id.meeting);
         createtask = findViewById(R.id.createtask);
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                contactList);
+        setListAdapter(adapter);
 
         Calendar c = Calendar.getInstance();
         int currentYear = c.get(Calendar.YEAR);
@@ -98,11 +105,22 @@ public class Event extends AppCompatActivity implements DatePickerDialog.OnDateS
         });
 
 
+
+        //Database
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        mUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+
         createtask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (location.getText().toString().length() != 0 && eventName.getText().toString().length() != 0) {
                     //String phoneNo =txtPhoneNo.getText().toString();
+                    eventReminder.setTask(String.valueOf(eventName.getText()));
+                    eventReminder.setLocation(String.valueOf(location.getText()));
+
 
                     for (int i = 0; i < contactList.size(); i++) {
                         String phoneNo = contactList.get(i);
@@ -110,13 +128,13 @@ public class Event extends AppCompatActivity implements DatePickerDialog.OnDateS
                                 eventReminder.getDay() + "/" + eventReminder.getMonth() + "/" + eventReminder.getYear() + "at " + eventReminder.getHour() + ":" + eventReminder.getMinute() + ".The vemue is " +
                                 location.getText().toString();
                         if (adapter != null) {
-                            mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
                             sendMessage(phoneNo, message);
 
                         } else {
                             Toast.makeText(getApplicationContext(), "Phone or message field is empty", Toast.LENGTH_SHORT).show();
                         }
                     }
+                    mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter all fields", Toast.LENGTH_SHORT).show();
                 }
@@ -178,12 +196,11 @@ public class Event extends AppCompatActivity implements DatePickerDialog.OnDateS
                             }
                         }
                     }
-
+                    eventReminder.setContactList(contactList);
                     break;
                 }
         }
     }
-
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {

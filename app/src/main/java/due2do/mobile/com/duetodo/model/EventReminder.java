@@ -1,11 +1,22 @@
 package due2do.mobile.com.duetodo.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Abhi on 2018-03-19.
  */
 
 public class EventReminder {
-    private String task, hour, minute, year, month, day, contact;
+    private String task, hour, minute, year, month, day, location;
+    ArrayList<String> contactList = new ArrayList<String>();
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String getTask() {
         return task;
@@ -55,8 +66,11 @@ public class EventReminder {
         this.day = day;
     }
 
-    public String getContact() {return contact;}
+    public ArrayList<String> getContactList() {
+        return contactList;
+    }
 
-    public void setContact(String contact) {this.contact = contact;}
-
+    public void setContactList(ArrayList<String> contactList) {
+        this.contactList = contactList;
+    }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.create2"
+    tools:context=".activities.AddTask"
     android:orientation="vertical">
 
     <FrameLayout
@@ -135,6 +135,7 @@
             android:layout_below="@+id/meeting"
             android:drawSelectorOnTop="false"
             tools:ignore="UnknownId" />
+
 
     </RelativeLayout>
 
