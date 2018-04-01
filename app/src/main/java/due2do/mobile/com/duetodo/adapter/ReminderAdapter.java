@@ -9,6 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -28,6 +38,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
     private Context mCtx;
     private List<Task> reminderList;
     private static final String TAG = "due2do.mobile.com.duetodo";
+    private DatabaseReference mDatabaseReference;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     //private final View.OnClickListener mOnClickListener = new TaskOnClickListener();
 
     public ReminderAdapter(Context mCtx, List<Task> reminderList) {
@@ -49,12 +61,6 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         holder.textViewTitle.setText(reminder.getTask());
         holder.textViewDate.setText(reminder.getDay()+"/"+reminder.getMonth()+"/"+reminder.getYear());
         holder.textViewPriority.setText("High");
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String id = reminder.getId();
-            }
-        });
     }
 
     @Override
@@ -77,6 +83,34 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
             textViewDate = itemView.findViewById(R.id.date);
             textViewPriority = itemView.findViewById(R.id.priority);
             delete = itemView.findViewById(R.id.delevent);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+                    final FirebaseUser mUser = firebaseAuth.getCurrentUser();
+                    Task deleteTask = new Task();
+                    deleteTask = reminderList.get(getAdapterPosition());
+                    reminderList.remove(getAdapterPosition());
+
+                    Query deleteQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByChild(deleteTask.getId()).limitToLast(1);
+                    deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                String key = ds.getKey();
+                                mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(key).setValue(null);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    Toast.makeText(mCtx,"Deleted", Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
 
         }

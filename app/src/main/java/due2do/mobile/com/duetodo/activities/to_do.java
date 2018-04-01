@@ -187,6 +187,7 @@ public class to_do extends AppCompatActivity {
         readRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                reminderList.clear();
                 for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
 
                     reminder = ds.getValue(Task.class);
