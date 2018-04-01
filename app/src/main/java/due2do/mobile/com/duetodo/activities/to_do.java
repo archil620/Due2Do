@@ -123,7 +123,7 @@ public class to_do extends AppCompatActivity {
         final FirebaseUser mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
-        final DatabaseReference simpleReadRef = mDatabaseReference.child(mUser.getUid()).child("SimpleTask");
+        //final DatabaseReference simpleReadRef = mDatabaseReference.child(mUser.getUid()).child("SimpleTask");
 
 
         add_task.setOnClickListener(new View.OnClickListener() {

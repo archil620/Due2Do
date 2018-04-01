@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -39,6 +41,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.model.LocationModel;
 import due2do.mobile.com.duetodo.model.Task;
@@ -54,7 +58,9 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
     private int taskFlag = 0;
     LocationModel model = new LocationModel();
     Query createQuery;
-
+    DatePickerDialog datePickerDialog;
+    TimePickerDialog timePickerDialog;
+    TextView time, date;
     // get uid
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private String uid = firebaseAuth.getCurrentUser().getUid();
@@ -80,6 +86,38 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
         taskName = (EditText) findViewById(R.id.taskName);
         clearTaskBtn = (Button) findViewById(R.id.clearTaskBtn);
         setTaskBtn = (ImageButton) findViewById(R.id.setTaskBtn);
+
+        time = findViewById(R.id.storetime);
+        date = findViewById(R.id.storedate);
+        Calendar c = Calendar.getInstance();
+        int currentYear = c.get(Calendar.YEAR);
+        int currentMonth = c.get(Calendar.MONTH);
+        final int today = c.get(Calendar.DAY_OF_MONTH);
+
+
+        //https://stackoverflow.com/questions/6451837/how-do-i-set-the-current-date-in-a-datepicker
+        datePickerDialog = new DatePickerDialog(
+                this, due2do.mobile.com.duetodo.activities.create2.this, currentYear, currentMonth, today);
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.create2.this, hour, minute, DateFormat.is24HourFormat(this));
+
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePickerDialog.show();
+            }
+        });
+
 
 
     }
@@ -204,11 +242,15 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
         model.setYear(String.valueOf(datePicker.getYear()));
         model.setMonth(String.valueOf(datePicker.getMonth()));
         model.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        date.setText(i + "/" + i1 + "/" + i2);
+
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
         model.setHour(String.valueOf(i));
         model.setMinute(String.valueOf(i1));
+
+        time.setText(i + ":" + i1);
     }
 }
