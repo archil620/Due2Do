@@ -3,6 +3,7 @@ package due2do.mobile.com.duetodo.model;
 import android.net.Uri;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Archil on 2018-02-10.
@@ -18,6 +19,8 @@ public class Task implements Serializable {
     private String minute;
     private String task;
     private String imageUri;
+    ArrayList<String> contactList = new ArrayList<String>();
+    private String location;
 
 
     public String getImageUri() {
@@ -84,4 +87,19 @@ public class Task implements Serializable {
         this.id = id;
     }
 
+    public ArrayList<String> getContactList() {
+        return contactList;
+    }
+
+    public void setContactList(ArrayList<String> contactList) {
+        this.contactList = contactList;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

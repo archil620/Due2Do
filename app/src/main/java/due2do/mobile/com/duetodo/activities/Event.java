@@ -33,6 +33,7 @@ import java.util.Calendar;
 
 import due2do.mobile.com.duetodo.model.EventReminder;
 import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.model.Task;
 
 public class Event extends ListActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -44,7 +45,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
-    EventReminder eventReminder = new EventReminder();
+    Task eventReminder = new Task();
     ArrayList<String> contactList = new ArrayList<String>();
     ArrayAdapter<String> adapter;
     private FirebaseDatabase database;
@@ -105,12 +106,10 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         });
 
 
-
         //Database
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
 
 
         createtask.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +134,8 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                         }
                     }
                     mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
+                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
+                    startActivity(displayTask);
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter all fields", Toast.LENGTH_SHORT).show();
                 }

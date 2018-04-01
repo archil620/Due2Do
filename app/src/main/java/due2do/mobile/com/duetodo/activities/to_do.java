@@ -195,10 +195,15 @@ public class to_do extends AppCompatActivity {
                 }
 
                 for(DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()){
-
                     reminder = ds.getValue(Task.class);
                     reminderList.add(reminder);
                 }
+
+                for(DataSnapshot ds : dataSnapshot.child("EventTask").getChildren()){
+                    reminder = ds.getValue(Task.class);
+                    reminderList.add(reminder);
+                }
+
                 adapter = new ReminderAdapter(to_do.this, reminderList);
                 recyclerView.setAdapter(adapter);
             }
