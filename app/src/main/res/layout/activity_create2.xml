@@ -1,51 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2A4D69">
+    tools:context=".activities.AddTask"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/taskName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:textColor="#FFFF"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="340dp"
-        android:layout_height="380dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="40dp"
-        tools:context="due2do.mobile.com.duetodo.activities.create2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="25dp"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/setTaskBtn"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
-        android:background="#00BCD4"
-        android:text="Set Task" />
+            <EditText
+                android:id="@+id/taskName"
+                android:layout_width="350dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="28dp"
+                android:background="@null"
+                android:hint="Remind me for..."
+                android:theme="@style/MyEditText"
+                android:inputType="textCapSentences"/>
 
-    <Button
-        android:id="@+id/clearTaskBtn"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:background="#FF5722"
-        android:text="CLEAR" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/dateimage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="14dp"
+                    android:src="@drawable/ic_date_range" />
+
+                <TextView
+                    android:id="@+id/storedate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:clickable="true"
+                    android:hint="00:00"
+                    android:textSize="20dp" />
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/timeimage"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/ic_access_alarm" />
+
+                <TextView
+                    android:id="@+id/storetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:clickable="true"
+                    android:hint="00:00"
+                    android:textSize="20dp" />
 
 
-</RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/priorityimage"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/ic_priority" />
+
+                <Spinner
+                    android:id="@+id/priority"
+                    android:layout_marginTop="23dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--https://stackoverflow.com/questions/9884202/custom-circle-button-->
+        <!--https://stackoverflow.com/questions/23921153/how-can-i-position-a-button-in-between-two-layouts-->
+        <ImageButton
+            android:id="@+id/setTaskBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/priorityimage"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ic_check"
+            android:text="@android:string/ok"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            tools:context="due2do.mobile.com.duetodo.activities.create2" />
+
+        <Button
+            android:id="@+id/clearTaskBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:background="@color/pink"
+            android:text="CLEAR" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
