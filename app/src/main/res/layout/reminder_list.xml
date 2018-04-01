@@ -44,6 +44,16 @@
                 android:text="@string/priority"
                 android:textColor="#4B86B4"
                 android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/delevent"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_above="@+id/priority"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:background="@null"
+                android:src="@drawable/ic_delete" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

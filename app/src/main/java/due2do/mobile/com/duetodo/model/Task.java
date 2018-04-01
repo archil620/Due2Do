@@ -1,19 +1,40 @@
 package due2do.mobile.com.duetodo.model;
 
+import android.net.Uri;
+
+import java.io.Serializable;
+
 /**
  * Created by Archil on 2018-02-10.
  */
 
-public class Task {
+public class Task implements Serializable {
 
-    private String name,time;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String name,time,id;
     private String year;
-    private String months;
+    private String month;
     private String day;
-    private String hours;
-    private String minutes;
+    private String hour;
+    private String minute;
     private String task;
+    private String imageUri;
 
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
 
     public String getTask() {
         return task;
@@ -47,12 +68,12 @@ public class Task {
         this.year = year;
     }
 
-    public String getMonths() {
-        return months;
+    public String getMonth() {
+        return month;
     }
 
-    public void setMonths(String months) {
-        this.months = months;
+    public void setMonth(String months) {
+        this.month = months;
     }
 
     public String getDay() {
@@ -63,19 +84,19 @@ public class Task {
         this.day = day;
     }
 
-    public String getHours() {
-        return hours;
+    public String getHour() {
+        return hour;
     }
 
-    public void setHours(String hours) {
-        this.hours = hours;
+    public void setHour(String hour) {
+        this.hour = hour;
     }
 
-    public String getMinutes() {
-        return minutes;
+    public String getMinute() {
+        return minute;
     }
 
-    public void setMinutes(String minutes) {
-        this.minutes = minutes;
+    public void setMinute(String minute) {
+        this.minute = minute;
     }
 }

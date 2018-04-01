@@ -24,8 +24,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,6 +53,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
     TextView textView;
     CameraReminder cameraReminder = new CameraReminder();
     File file = null;
+    String id = null;
 
     private String[] galleryPermissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
     @Override
@@ -70,7 +75,6 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
 
         final DatabaseReference mDatabaseReference;
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
         final FirebaseUser mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         //final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid()).child("CameraTask");
@@ -91,16 +95,47 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
             public void onClick(View view) {
                 //myRef.child("task").setValue()
                 cameraReminder.setTask(String.valueOf(textView.getText()));
-                mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(cameraReminder);
-                Toast.makeText(CameraActivity.this,"Task Created",Toast.LENGTH_SHORT).show();
-                Intent displayTask = new Intent(CameraActivity.this,to_do.class);
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getTask()));
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getYear()));
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getMonth()));
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getDay()));
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getHour()));
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getMinute()));
-                startActivity(displayTask);
+
+               final Query lastQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
+
+                lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                CameraReminder databaseCameraReminder = new CameraReminder();
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot ds: dataSnapshot.getChildren()){
+                            databaseCameraReminder = ds.getValue(CameraReminder.class);
+                        }
+
+                        if(databaseCameraReminder.getId() != null && !(databaseCameraReminder.getId().isEmpty())){
+                            int val = Integer.valueOf(databaseCameraReminder.getId().substring(1));
+                            val = val + 1;
+                            cameraReminder.setId("C"+val);
+
+                        }else{
+                            cameraReminder.setId("C1");
+                        }
+
+                        mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(cameraReminder);
+                        Toast.makeText(CameraActivity.this,"Task Created",Toast.LENGTH_SHORT).show();
+
+                        Intent displayTask = new Intent(CameraActivity.this,to_do.class);
+                        displayTask.putExtra("Task", String.valueOf(cameraReminder.getTask()));
+                        displayTask.putExtra("Task", String.valueOf(cameraReminder.getYear()));
+                        displayTask.putExtra("Task", String.valueOf(cameraReminder.getMonth()));
+                        displayTask.putExtra("Task", String.valueOf(cameraReminder.getDay()));
+                        displayTask.putExtra("Task", String.valueOf(cameraReminder.getHour()));
+                        displayTask.putExtra("Task", String.valueOf(cameraReminder.getMinute()));
+                        startActivity(displayTask);
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
         });

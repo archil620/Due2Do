@@ -15,17 +15,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".application.Due2Do">
 
-        <!-- https://stackoverflow.com/questions/47448297/how-to-get-uri-of-captured-photo -->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="due2do.mobile.com.duetodo"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
+                android:resource="@xml/provider_paths"></meta-data>
         </provider>
 
         <activity android:name=".activities.MainActivity">
@@ -48,21 +48,24 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAfvURBhIfY7XD17ITT3OFx6EVmcaYNJzM" />
+
         <activity android:name=".activities.create2" />
         <activity
             android:name=".activities.MainActivity1"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.AddTask" />
         <activity android:name=".activities.SingleTask" />
         <activity android:name=".activities.CameraActivity" />
         <activity android:name=".activities.Event" />
+        />
 
         <service
             android:name=".services.TrackLocationService"
             android:enabled="true"
             android:exported="true" />
-        <activity android:name=".activities.TrackStatus"></activity>
+
+        <activity android:name=".activities.TrackStatus" />
     </application>
 
 </manifest>

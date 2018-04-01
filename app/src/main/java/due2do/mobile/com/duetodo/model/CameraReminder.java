@@ -1,12 +1,18 @@
 package due2do.mobile.com.duetodo.model;
 
+import android.net.Uri;
+
+import java.io.Serializable;
+
 /**
  * Created by Ankit Varshney on 27/02/2018.
  */
 
-public class CameraReminder {
+public class CameraReminder implements Serializable {
 
-    private String task, hour, minute, year, month, day, encodedImage;
+    private String id, task, hour, minute, year, month, day;
+    private String imageUri;
+
 
     public String getTask() {
         return task;
@@ -54,6 +60,35 @@ public class CameraReminder {
 
     public void setDay(String day) {
         this.day = day;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    @Override
+    public String toString() {
+        return "CameraReminder{" +
+                "id='" + id + '\'' +
+                ", task='" + task + '\'' +
+                ", hour='" + hour + '\'' +
+                ", minute='" + minute + '\'' +
+                ", year='" + year + '\'' +
+                ", month='" + month + '\'' +
+                ", day='" + day + '\'' +
+                '}';
     }
 
     /*public String getEncodedImage() {

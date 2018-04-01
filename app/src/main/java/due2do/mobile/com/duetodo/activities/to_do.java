@@ -27,6 +27,7 @@ import java.util.List;
 import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
+import due2do.mobile.com.duetodo.model.Task;
 
 public class to_do extends AppCompatActivity {
 
@@ -36,11 +37,10 @@ public class to_do extends AppCompatActivity {
     Animation fabopen, fabclose, fabrotate, fabantirotate;
     TextView taskName,taskDate;
     boolean isopen = false;
-    CameraReminder cameraReminder = new CameraReminder();
+    Task cameraReminder = new Task();
     RecyclerView recyclerView;
     ReminderAdapter adapter;
-
-    List<CameraReminder> reminderList = new ArrayList<>();
+    List<Task> reminderList = new ArrayList<>();
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -68,7 +68,7 @@ public class to_do extends AppCompatActivity {
         String name = user.getDisplayName(); // https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase
         username.setText(name);
 
-        // database
+
         final FirebaseUser mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
@@ -145,13 +145,13 @@ public class to_do extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
 
-                    cameraReminder = ds.getValue(CameraReminder.class);
+                    cameraReminder = ds.getValue(Task.class);
                     reminderList.add(cameraReminder);
                 }
 
                 for(DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()){
 
-                    cameraReminder = ds.getValue(CameraReminder.class);
+                    cameraReminder = ds.getValue(Task.class);
                     reminderList.add(cameraReminder);
                 }
                 adapter = new ReminderAdapter(to_do.this, reminderList);

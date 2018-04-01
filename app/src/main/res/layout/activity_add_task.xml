@@ -7,47 +7,163 @@
     tools:context=".activities.AddTask"
     android:orientation="vertical">
 
-    <EditText
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTask"
-        android:hint="Enter Task"/>
+        android:layout_height="200dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="25dp"
+            android:background="@color/colorPrimary">
+
+            <EditText
+                android:id="@+id/taskname"
+                android:layout_width="350dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="28dp"
+                android:background="@null"
+                android:hint="Remind me for..."
+                android:theme="@style/MyEditText" />
+
+            <ImageView
+                android:id="@+id/dateimage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignStart="@+id/taskname"
+                android:layout_below="@+id/taskname"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/ic_date_range" />
+
+            <TextView
+                android:id="@+id/storedate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/priorityimage"
+                android:clickable="true"
+                android:hint="00:00"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/timeimage"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignBottom="@+id/storetime"
+                android:layout_toEndOf="@+id/priority"
+                android:src="@drawable/ic_access_alarm" />
+
+            <TextView
+                android:id="@+id/storetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/storedate"
+                android:layout_alignBottom="@+id/storedate"
+                android:layout_marginStart="22dp"
+                android:layout_toEndOf="@+id/timeimage"
+                android:clickable="true"
+                android:hint="00:00"
+                android:textSize="20dp" />
 
 
-    <EditText
+
+            <ImageView
+                android:id="@+id/priorityimage"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/dateimage"
+                android:src="@drawable/ic_priority" />
+
+            <Spinner
+                android:id="@+id/priority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/storedate" />
+
+
+        </RelativeLayout>
+
+        <!--https://stackoverflow.com/questions/9884202/custom-circle-button-->
+        <!--https://stackoverflow.com/questions/23921153/how-can-i-position-a-button-in-between-two-layouts-->
+        <ImageButton
+            android:id="@+id/createtask"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/priorityimage"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ic_check"
+            android:text="@android:string/ok"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/in_date"
-        android:layout_marginTop="82dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/in_time"
-        android:layout_marginTop="82dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <ImageButton
+                android:id="@+id/camera"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="46dp"
+                android:layout_marginTop="21dp"
+                android:background="@null"
+                android:src="@drawable/ic_camera_alt" />
 
 
+        <ImageView
+            android:id="@+id/displayimage"
+            android:layout_toEndOf="@id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/default1"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SELECT DATE &amp; TIME"
-        android:id="@+id/btn_date"
-        android:layout_alignBottom="@+id/in_date"
-        android:layout_toRightOf="@+id/in_date"
-        android:layout_toEndOf="@+id/in_date" />
+        </RelativeLayout>
 
-    <Button
-        android:id="@+id/add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Task"
-        android:onClick="addButtonClicked"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/link"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="46dp"
+                android:layout_marginTop="21dp"
+                android:background="@null"
+                android:src="@drawable/ic_insert_link" />
+
+
+            <EditText
+                android:id="@+id/editlink"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/link"
+                android:layout_marginEnd="31dp" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>
