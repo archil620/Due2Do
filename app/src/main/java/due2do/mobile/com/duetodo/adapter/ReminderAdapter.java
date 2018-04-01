@@ -14,7 +14,7 @@ import java.util.List;
 
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.activities.AddTask;
-import due2do.mobile.com.duetodo.activities.MainActivity1;
+
 import due2do.mobile.com.duetodo.activities.SingleTask;
 import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.model.Task;
@@ -56,8 +56,6 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {

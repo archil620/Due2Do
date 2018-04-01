@@ -10,15 +10,7 @@ import java.io.Serializable;
 
 public class Task implements Serializable {
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    private String name,time,id;
+    private String id;
     private String year;
     private String month;
     private String day;
@@ -42,22 +34,6 @@ public class Task implements Serializable {
 
     public void setTask(String task) {
         this.task = task;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getYear() {
@@ -99,4 +75,13 @@ public class Task implements Serializable {
     public void setMinute(String minute) {
         this.minute = minute;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

@@ -1,8 +1,11 @@
 /*package com.example.archil.todo;
 
-*//**
+*//*
+*/
+/**
  * Created by Archil on 2018-02-27.
- */package due2do.mobile.com.duetodo.activities;
+ *//*
+package due2do.mobile.com.duetodo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,13 +41,16 @@ public class MainActivity1 extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-       /* mTaskList.setHasFixedSize(true);
-        mTaskList.setLayoutManager(new LinearLayoutManager(this));*/
+       */
+/* mTaskList.setHasFixedSize(true);
+        mTaskList.setLayoutManager(new LinearLayoutManager(this));*//*
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Tasks");
 
 
 
-        /*SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        */
+/*SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
         bannerDay.setText(dayOfTheWeek);
@@ -52,12 +58,15 @@ public class MainActivity1 extends AppCompatActivity {
         long date = System.currentTimeMillis();
         SimpleDateFormat sdff = new SimpleDateFormat("MMM MM dd, yyy h:mm a");
         String datestring = sdff.format(date);
-        bannerDate.setText(datestring);*/
+        bannerDate.setText(datestring);*//*
+
     }
 
-    /*public void onClick(View view) {
+    */
+/*public void onClick(View view) {
         startActivity(new Intent(this, MainActivity.class));
-    }*/
+    }*//*
+
 
 
     @Override
@@ -119,7 +128,9 @@ public class MainActivity1 extends AppCompatActivity {
             }
         };
 
-        /*mTaskList.setAdapter(FBRA);*/
+        */
+/*mTaskList.setAdapter(FBRA);*//*
+
     }
 
     @Override
@@ -142,3 +153,4 @@ public class MainActivity1 extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+*/

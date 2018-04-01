@@ -61,13 +61,14 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     ImageButton image, location, contact, createTask;
     ImageView displayimage;
     Task task = new Task();
+    Task passedIntent = new Task();
     String storageImage;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     private String[] galleryPermissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
     String mCurrentPhotoPath;
     boolean flag = false;
-    Query lastQuery;
+    Query createQuery, updateQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,14 +90,14 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
         //storageImage = "cam" + currentYear + currentMonth + today + hour + minute;
 
-        Task passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
+        passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
 
         if (passedIntent != null) {
             taskName.setText(passedIntent.getTask());
-            date.setText(passedIntent.getDay()+"/"+passedIntent.getMonth()+"/"+passedIntent.getYear());
-            time.setText(passedIntent.getHour()+":"+passedIntent.getMinute());
+            date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
+            time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
 
-            String photoPath = Environment.getExternalStorageDirectory()+"/abc.jpg";
+            String photoPath = Environment.getExternalStorageDirectory() + "/abc.jpg";
 
             Bitmap myBitmap = BitmapFactory.decodeFile(passedIntent.getImageUri());
             mCurrentPhotoPath = passedIntent.getImageUri();
@@ -158,38 +159,60 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             @Override
             public void onClick(View view) {
                 //myRef.child("task").setValue()
-                task.setTask(String.valueOf(taskName.getText()));
-                lastQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
 
-                lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    Task reminder = new Task();
 
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            reminder = ds.getValue(Task.class);
+                if (passedIntent != null) {
+                    passedIntent.setTask(String.valueOf(taskName.getText()));
+                    updateQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByChild(passedIntent.getId());
+                    updateQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                String key = ds.getKey();
+                                mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(key).setValue(passedIntent);
+                            }
                         }
 
-                        if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
-                            int val = Integer.valueOf(reminder.getId().substring(1));
-                            val = val + 1;
-                            task.setId("C" + val);
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                        } else {
-                            task.setId("C1");
                         }
-                        mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
-                        Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
+                    });
 
-                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
-                        startActivity(displayTask);
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                } else {
+                    createQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
+                    createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        Task reminder = new Task();
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                reminder = ds.getValue(Task.class);
+                            }
+                            if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
+                                int val = Integer.valueOf(reminder.getId().substring(1));
+                                val = val + 1;
+                                task.setId("C" + val);
 
-                    }
-                });
+                            } else {
+                                task.setId("C1");
+
+                            }
+                            task.setTask(String.valueOf(taskName.getText()));
+                            mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+                Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
+
+                Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                startActivity(displayTask);
+
 
             }
         });
@@ -200,21 +223,36 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        task.setYear(String.valueOf(datePicker.getYear()));
-        task.setMonth(String.valueOf(datePicker.getMonth()));
-        task.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
-        date.setText(dayOfMonth+"/"+month+"/"+year);
+        if(passedIntent != null){
+            passedIntent.setYear(String.valueOf(datePicker.getYear()));
+            passedIntent.setMonth(String.valueOf(datePicker.getMonth()));
+            passedIntent.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        }else{
+            task.setYear(String.valueOf(datePicker.getYear()));
+            task.setMonth(String.valueOf(datePicker.getMonth()));
+            task.setDay(String.valueOf(datePicker.getDayOfMonth()));
+
+        }
+
+
+        date.setText(dayOfMonth + "/" + month + "/" + year);
 
     }
 
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        task.setHour(String.valueOf(hourOfDay));
-        task.setMinute(String.valueOf(minute));
 
-        time.setText(hourOfDay+":"+minute);
+        if(passedIntent !=null){
+            passedIntent.setHour(String.valueOf(hourOfDay));
+            passedIntent.setMinute(String.valueOf(minute));
+        }else{
+            task.setHour(String.valueOf(hourOfDay));
+            task.setMinute(String.valueOf(minute));
+        }
+
+        time.setText(hourOfDay + ":" + minute);
     }
 
     private void showPictureDialog() {
