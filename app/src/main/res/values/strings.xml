@@ -17,6 +17,8 @@
     <string name="addressfield">Name</string>
     <string name="title_activity_to_do">to_do</string>
     <string name="action_settings">Settings</string>
+    <string name="today">Date</string>
+    <string name="calendarbtn">TODO</string>
 
     <string-array name="priority">
         <item>High</item>
