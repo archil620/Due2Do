@@ -204,6 +204,8 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         task.setMonth(String.valueOf(datePicker.getMonth()));
         task.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
+        date.setText(dayOfMonth+"/"+month+"/"+year);
+
     }
 
 
@@ -212,6 +214,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         task.setHour(String.valueOf(hourOfDay));
         task.setMinute(String.valueOf(minute));
 
+        time.setText(hourOfDay+":"+minute);
     }
 
     private void showPictureDialog() {
