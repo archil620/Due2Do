@@ -24,7 +24,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.karan.churi.PermissionManager.PermissionManager;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import due2do.mobile.com.duetodo.R;
@@ -46,6 +48,8 @@ References
 [4] Firebase, “firebase/quickstart-android,” GitHub. [Online]. Available:
     https://github.com/firebase/quickstart-android/blob/master/auth/app/src/main/java/com/google/firebase/quickstart/auth/GoogleSignInActivity.java#L87-L93.
     [Accessed: 28-Feb-2018].
+
+[5] "karanchuri/PermissionManager", GitHub, 2018. [Online]. Available: https://github.com/karanchuri/PermissionManager. [Accessed: 25- March- 2018].
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private String TAG;
     private FirebaseAuth mAuth;
+    PermissionManager permissionManager;
 
 
 
@@ -63,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(due2do.mobile.com.duetodo.R.layout.activity_main);
+
+        permissionManager= new PermissionManager() {};
+        permissionManager.checkAndRequestPermissions(this);
+
 
         googleBtn = (SignInButton)findViewById(R.id.googleBtn);
         // Configure Google Sign In
@@ -83,6 +92,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionManager.checkResult(requestCode, permissions, grantResults);
+
+
+    }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
