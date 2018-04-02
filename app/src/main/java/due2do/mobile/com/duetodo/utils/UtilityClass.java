@@ -26,6 +26,14 @@ import due2do.mobile.com.duetodo.services.RingtonePlayingService;
 
 /**
  * Created by Bhargav Dalal on 17/03/2018.
+ * Referneces:
+ *  [1] “NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID) not working on Oreo Firebase notification,” android - NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID) not working on Oreo Firebase notification - Stack Overflow. [Online].
+ *  Available: https://stackoverflow.com/questions/47567676/notificationcompat-buildergetapplicationcontext-channel-id-not-working-on-o.
+ *  [Accessed: 02-Apr-2018].
+ *
+ *  [2] “How to make an Android device vibrate?,” java - How to make an Android device vibrate? - Stack Overflow. [Online].
+ *  Available: https://stackoverflow.com/questions/13950338/how-to-make-an-android-device-vibrate#13950364.
+ *  [Accessed: 02-Apr-2018].
  */
 
 public class UtilityClass {

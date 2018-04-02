@@ -59,9 +59,6 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference readRef = database.getReference().child("CameraTask");*/
-
         firebaseAuth = FirebaseAuth.getInstance();
         mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
