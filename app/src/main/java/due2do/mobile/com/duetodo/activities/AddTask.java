@@ -113,25 +113,29 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
             time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
             FirebaseStorage storage = FirebaseStorage.getInstance("gs://due2do-app.appspot.com");
-            StorageReference ref = storage.getReferenceFromUrl(passedIntent.getImageUri());
-            try {
-                final File file = File.createTempFile("Images", "JPG");
-                ref.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                        myBitmap = Bitmap.createScaledBitmap(myBitmap, 500, 500, false);
-                        displayimage.setImageBitmap(myBitmap);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+            if(passedIntent.getImageUri() != null){
+                StorageReference ref = storage.getReferenceFromUrl(passedIntent.getImageUri());
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    final File file = File.createTempFile("Images", "JPG");
+                    ref.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                            myBitmap = Bitmap.createScaledBitmap(myBitmap, 500, 500, false);
+                            displayimage.setImageBitmap(myBitmap);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             //time.setText();

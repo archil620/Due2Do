@@ -1,8 +1,12 @@
 package due2do.mobile.com.duetodo.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +37,7 @@ import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
 import due2do.mobile.com.duetodo.model.Task;
+import due2do.mobile.com.duetodo.services.NotificationService;
 
 public class to_do extends AppCompatActivity {
 
@@ -81,8 +86,6 @@ public class to_do extends AppCompatActivity {
         // database
         mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
-
         //to display today's day
         c = java.util.Calendar.getInstance();
 
@@ -94,6 +97,26 @@ public class to_do extends AppCompatActivity {
         String cday = d.format(c.getTime());
         td.setText(String.valueOf(cmonth + ", " + cday));
 
+        // database
+        final FirebaseUser mUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
+        final DatabaseReference simpleReadRef = mDatabaseReference.child(mUser.getUid()).child("SimpleTask");
+
+        //Code Changes for notification Functionality
+        PowerManager mgr = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLock");
+        wakeLock.acquire();
+
+        Intent intent = new Intent(this, NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 0); // first time
+        long frequency = 60 * 1000; // in ms
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
 
 
         //to go to next date
