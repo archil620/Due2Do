@@ -1,5 +1,6 @@
 package due2do.mobile.com.duetodo.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -71,6 +72,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
 
     private String taskId;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,9 +85,9 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        taskName = (EditText) findViewById(R.id.taskName);
+        taskName = (EditText) findViewById(R.id.taskname);
         clearTaskBtn = (Button) findViewById(R.id.clearTaskBtn);
-        setTaskBtn = (ImageButton) findViewById(R.id.setTaskBtn);
+        setTaskBtn = (ImageButton) findViewById(R.id.createtask);
 
         time = findViewById(R.id.storetime);
         date = findViewById(R.id.storedate);

@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="175dp"
-            android:background="@color/colorLightSteelBlue">
+            android:background="@color/colorCyan">
 
         </android.support.v7.widget.Toolbar>
 
@@ -25,6 +25,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom|right"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/round_btn"
             android:contentDescription="TODO"
             android:src="@drawable/add_task"
@@ -100,8 +101,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_above="@+id/recylerView"
-        android:layout_alignEnd="@+id/today"
         android:layout_marginBottom="13dp"
+        android:layout_marginEnd="12dp"
+        android:layout_toStartOf="@+id/done_btn"
         android:background="@drawable/round_btn2"
         android:clickable="true"
         android:focusable="true"
@@ -112,15 +114,26 @@
         android:id="@+id/location_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_below="@+id/frame"
-        android:layout_toStartOf="@+id/next"
+        android:layout_alignEnd="@+id/today"
+        android:layout_alignTop="@+id/camera_btn"
         android:background="@drawable/round_btn2"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
         app:srcCompat="@drawable/location" />
 
-
+    <ImageButton
+        android:id="@+id/done_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/add_people_btn"
+        android:layout_marginBottom="14dp"
+        android:layout_toStartOf="@+id/camera_btn"
+        android:background="@drawable/round_btn2"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/task_done" />
 
 
 </RelativeLayout>

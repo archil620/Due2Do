@@ -38,8 +38,7 @@ public class to_do extends AppCompatActivity {
 
     private TextView username;
     TextView td;
-    // FloatingActionButton  fab_photo, fab_map, fab_simple,fab_event;
-    ImageButton add_task, camera_task, location, add_people ;
+    ImageButton add_task, camera_task, location, add_people, done_task ;
     Animation fabopen, fabclose, fabrotate, fabantirotate;
     TextView taskName,taskDate;
     boolean isopen = false;
@@ -49,26 +48,26 @@ public class to_do extends AppCompatActivity {
     ImageButton next, previous;
 
     List<Task> reminderList = new ArrayList<>();
+    List<Task> displayList = new ArrayList<>();
 
     private DatabaseReference mDatabaseReference;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-
+    FirebaseUser mUser;
+    SimpleDateFormat d;
+    SimpleDateFormat m;
+    java.util.Calendar c;
+    SimpleDateFormat month_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do);
-        username = (TextView) findViewById(R.id.username);
-        //fab_main = (FloatingActionButton) findViewById(R.id.add_task);
-        add_task = (ImageButton) findViewById(R.id.add_task);
-        camera_task = (ImageButton) findViewById(R.id.camera_btn);
-        location = (ImageButton) findViewById(R.id.location_btn);
-        add_people = (ImageButton) findViewById(R.id.add_people_btn);
-       // fab_photo = (FloatingActionButton) findViewById(R.id.floatingActionButton4);
-       // fab_map = (FloatingActionButton) findViewById(R.id.floatingActionButton5);
-       // fab_simple = (FloatingActionButton) findViewById(R.id.floatingActionButton6);
-       // fab_event = (FloatingActionButton) findViewById(R.id.floatingActionButton7);
+        username = findViewById(R.id.username);
+        add_task = findViewById(R.id.add_task);
+        camera_task = findViewById(R.id.camera_btn);
+        location = findViewById(R.id.location_btn);
+        add_people = findViewById(R.id.add_people_btn);
+        done_task = findViewById(R.id.done_btn);
         fabopen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation);
         fabclose= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation_close);
         fabrotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
@@ -79,37 +78,39 @@ public class to_do extends AppCompatActivity {
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
 
-        //to display today's day
-        final java.util.Calendar c = java.util.Calendar.getInstance();
+        // database
+        mUser = firebaseAuth.getCurrentUser();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
 
-        final SimpleDateFormat d = new SimpleDateFormat("dd");
-        final SimpleDateFormat m = new SimpleDateFormat("MMMM");
+        //to display today's day
+        c = java.util.Calendar.getInstance();
+
+        d = new SimpleDateFormat("dd");
+        m = new SimpleDateFormat("MMMM");
+        month_index = new SimpleDateFormat("M");
+        final String month = month_index.format(c.getTime());
         String cmonth = m.format(c.getTime());
         String cday = d.format(c.getTime());
         td.setText(String.valueOf(cmonth + ", " + cday));
+
+
 
         //to go to next date
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 c.add(Calendar.DATE, 1);
-                String cmonth = m.format(c.getTime());
-                String cday = d.format(c.getTime());
-                td.setText(String.valueOf(cmonth + ", " + cday));
-
+                displayData(c);
             }
         });
 
         //to go to previous date
-        //to go to next date
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 c.add(Calendar.DATE, -1);
-                String cmonth = m.format(c.getTime());
-                String cday = d.format(c.getTime());
-                td.setText(String.valueOf(cmonth + ", " + cday));
-
+                displayData(c);
             }
         });
 
@@ -119,11 +120,6 @@ public class to_do extends AppCompatActivity {
         String name = user.getDisplayName(); // https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase
         username.setText(name);
 
-        // database
-        final FirebaseUser mUser = firebaseAuth.getCurrentUser();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
-        //final DatabaseReference simpleReadRef = mDatabaseReference.child(mUser.getUid()).child("SimpleTask");
 
 
         add_task.setOnClickListener(new View.OnClickListener() {
@@ -134,10 +130,11 @@ public class to_do extends AppCompatActivity {
                     location.startAnimation(fabclose);
                     camera_task.startAnimation(fabclose);
                     add_people.startAnimation(fabclose);
-                   // fab_main.startAnimation(fabantirotate);
+                    done_task.startAnimation(fabclose);
                     location.setClickable(false);
                     camera_task.setClickable(false);
                     add_people.setClickable(false);
+                    done_task.setClickable(false);
                     isopen=false;
 
                 }else {
@@ -145,11 +142,12 @@ public class to_do extends AppCompatActivity {
                     location.startAnimation(fabopen);
                     camera_task.startAnimation(fabopen);
                     add_people.startAnimation(fabopen);
-                    //fab_main.startAnimation(fabrotate);
+                    done_task.startAnimation(fabopen);
 
                     location.setClickable(true);
                     camera_task.setClickable(true);
                     add_people.setClickable(true);
+                    done_task.setClickable(true);
                     isopen=true;
                 }
             }
@@ -179,7 +177,7 @@ public class to_do extends AppCompatActivity {
 
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recylerView);
+        /*recyclerView = (RecyclerView) findViewById(R.id.recylerView);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -212,10 +210,89 @@ public class to_do extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
 
     }
+
+    private void displayData(Calendar c) {
+        recyclerView = (RecyclerView) findViewById(R.id.recylerView);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final String cmonth = m.format(c.getTime());
+        final String cday = d.format(c.getTime());
+        final String month = month_index.format(c.getTime());
+        td.setText(String.valueOf(cmonth + ", " + cday));
+
+        DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
+
+        readRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                displayList.clear();
+                for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
+                    Task details = ds.getValue(Task.class);
+                    String m = details.getMonth();
+                    String d = details.getDay();
+                    if(m != null && d != null){
+
+
+                        if (month.contains(m))
+                        {
+                            if (cday.contains(d))
+                            {
+                                reminder = ds.getValue(Task.class);
+                                displayList.add(reminder);
+                            }
+                        }
+                    }
+                }
+
+                for(DataSnapshot ds : dataSnapshot.child("EventTask").getChildren()){
+                    Task details = ds.getValue(Task.class);
+                    String m = details.getMonth();
+                    String d = details.getDay();
+                    if(m != null && d != null){
+                        if (month.contains(m))
+                        {
+                            if (cday.contains(d))
+                            {
+                                reminder = ds.getValue(Task.class);
+                                displayList.add(reminder);
+                            }
+                        }
+
+                    }
+
+                }
+
+                for(DataSnapshot ds : dataSnapshot.child("LocationBased").getChildren()){
+                    Task details = ds.getValue(Task.class);
+                    String m = details.getMonth();
+                    String d = details.getDay();
+                    if( m != null && d !=null){
+                        if (month.contains(m))
+                        {
+                            if (cday.contains(d))
+                            {
+                                reminder = ds.getValue(Task.class);
+                                displayList.add(reminder);
+                            }
+                        }
+                    }
+                }
+                adapter = new ReminderAdapter(to_do.this, displayList);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action, menu);

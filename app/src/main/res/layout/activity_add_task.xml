@@ -9,26 +9,29 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:background="@color/colorGlitter">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="25dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorCyan"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/taskname"
-                android:layout_width="350dp"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:background="@null"
                 android:hint="Remind me for..."
-                android:theme="@style/MyEditText"
-                android:inputType="textCapSentences"/>
+                android:inputType="textCapSentences"
+                android:textColor="@color/colorDarkSlateGray"
+                android:textColorHint="@color/colorDarkSlateGray"
+                android:theme="@style/MyEditText" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -37,18 +40,19 @@
 
                 <ImageView
                     android:id="@+id/dateimage"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginStart="14dp"
-                    android:src="@drawable/ic_date_range" />
+                    android:src="@drawable/date_pick" />
 
                 <TextView
                     android:id="@+id/storedate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"
                     android:clickable="true"
-                    android:hint="00:00"
+                    android:hint="00-00"
                     android:textSize="20dp" />
 
                 <View
@@ -57,15 +61,16 @@
 
                 <ImageView
                     android:id="@+id/timeimage"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@drawable/ic_access_alarm" />
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/time_pick" />
 
                 <TextView
                     android:id="@+id/storetime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"
                     android:clickable="true"
                     android:hint="00:00"
                     android:textSize="20dp" />
@@ -77,18 +82,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/priorityimage"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/ic_priority" />
+
+                <EditText
+                    android:id="@+id/priority_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="24dp"
+                    android:background="@null"
+                    android:hint="Priority"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/colorDarkSlateGray"
+                    android:textColorHint="@color/colorDarkSlateGray"
+                    android:theme="@style/MyEditText" />
 
                 <Spinner
                     android:id="@+id/priority"
-                    android:layout_marginTop="23dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_marginTop="28dp"
+                    android:backgroundTint="@color/colorDarkSlateGray" />
             </LinearLayout>
 
         </LinearLayout>
@@ -102,7 +116,7 @@
             android:layout_below="@+id/priorityimage"
             android:layout_gravity="bottom|right"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/round_button"
+            android:background="@drawable/round_button_demo"
             android:src="@drawable/ic_check"
             android:text="@android:string/ok"
             android:textColor="@android:color/white"
@@ -113,7 +127,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorGlitter">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -125,10 +140,10 @@
                 android:layout_height="50dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="46dp"
-                android:layout_marginTop="21dp"
+                android:layout_marginStart="49dp"
+                android:layout_marginTop="23dp"
                 android:background="@null"
-                android:src="@drawable/ic_camera_alt" />
+                android:src="@drawable/capture_image" />
 
 
             <ImageView
@@ -136,7 +151,7 @@
                 android:layout_toEndOf="@id/camera"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@drawable/default1"/>
+                android:src="@drawable/image_default"/>
 
         </RelativeLayout>
 
@@ -150,19 +165,21 @@
                 android:layout_height="50dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="46dp"
+                android:layout_marginStart="52dp"
                 android:layout_marginTop="21dp"
                 android:background="@null"
-                android:src="@drawable/ic_insert_link" />
+                android:src="@drawable/note" />
 
 
             <EditText
                 android:id="@+id/editlink"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/link"
-                android:layout_marginEnd="31dp" />
+                android:layout_marginStart="21dp"
+                android:hint="Add comments"
+                android:backgroundTint="@color/colorDarkSlateGray"
+                android:layout_toEndOf="@+id/link" />
 
         </RelativeLayout>
 

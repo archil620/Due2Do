@@ -1,5 +1,6 @@
 package due2do.mobile.com.duetodo.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     ImageButton btn, createtask;
     private final int REQUEST_CODE = 99;
     EditText eventName, location;
-    Button btPick;
+    ImageButton btPick;
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -52,6 +53,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +61,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
 
         time = findViewById(R.id.storetime);
         date = findViewById(R.id.storedate);
-        eventName = findViewById(R.id.eventName);
+        eventName = findViewById(R.id.taskname);
         btn = findViewById(R.id.cal);
         btPick = findViewById(R.id.btnpick_contact);
         location = (EditText) findViewById(R.id.meeting);
