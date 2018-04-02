@@ -60,9 +60,7 @@
         <activity android:name=".activities.Event" />
 
         <service
-            android:name=".services.TrackLocationService"
-            android:enabled="true"
-            android:exported="true" />
+            android:name=".services.TrackLocationService" />
         <service android:name=".services.NotificationService"/>
         <service android:name=".services.RingtonePlayingService"/>
         <receiver android:name=".services.AppBroadcastReceiver"  android:exported="true">

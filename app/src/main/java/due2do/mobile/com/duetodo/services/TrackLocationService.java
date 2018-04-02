@@ -24,14 +24,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.activities.TrackStatus;
 import due2do.mobile.com.duetodo.activities.create2;
+import due2do.mobile.com.duetodo.model.Task;
 
 public class TrackLocationService extends Service {
-
-    private String taskname;
-    private String taskId;
 
     // get uid
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -41,16 +46,21 @@ public class TrackLocationService extends Service {
 
     private static final String TASK = "task";
     private static final String CURRENT = "current";
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.CANADA);
 
     private Double currentLatitude;
     private Double currentLongitude;
     private Double taskLatitude;
     private Double taskLongitude;
+
+    long difference;
+    Task taskObj = new Task();
+
     private static final int LOCATION_INTERVAL = 60000;
     private static final float LOCATION_DISTANCE = 5000;
 
     LocationManager locationManager;
-
+    Date taskDate;
     public TrackLocationService() {
     }
 
@@ -94,40 +104,76 @@ public class TrackLocationService extends Service {
 
             }
         });
-        // retrieve task latlong from the database
-        taskname = intent.getStringExtra("TaskName");
-        taskId = intent.getStringExtra("TaskId");
 
-        Toast.makeText(TrackLocationService.this, taskId,Toast.LENGTH_SHORT).show();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference taskRef = mDatabaseReference.child(uid).child("LocationBased").child(taskId);
-        taskRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference taskRef = mDatabaseReference.child(uid).child("LocationBased");
+        taskRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                taskLatitude = dataSnapshot.child("latitude").getValue(Double.class); // retrieved task latitude
-                taskLongitude = dataSnapshot.child("longitude").getValue(Double.class); // retrieved task longitude
 
-                // calculate distance between current latitude and longitude
-                // https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude-what-am-i-doi
-                final int R = 6371; // Radius of the earth
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    taskObj = ds.getValue(Task.class);
 
-                double latDistance = Math.toRadians(currentLatitude - taskLatitude);
-                double lonDistance = Math.toRadians(currentLongitude - taskLongitude);
+                    // date time operation
+//                    Log.i("diff", String.valueOf(taskObj.getDay()));
+//                    Log.i("diff", String.valueOf(taskObj.getMonth()));
+//                    Log.i("diff", String.valueOf(taskObj.getYear()));
+//                    Log.i("diff", String.valueOf(taskObj.getHour()));
+//                    Log.i("diff", String.valueOf(taskObj.getMinute()));
+                    final Date currentTime = Calendar.getInstance().getTime();
+                    final Calendar cal = Calendar.getInstance();
+                    try {
+                        String date = date = taskObj.getDay() + "/" + taskObj.getMonth() + "/" + taskObj.getYear() + " " + taskObj.getHour() + ":" + taskObj.getMinute();
+                        taskDate = dateFormat.parse(date);
 
-                double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                        + Math.cos(Math.toRadians(currentLatitude)) * Math.cos(Math.toRadians(taskLatitude))
-                        * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-                double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                double distance = R * c ;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if(taskDate != null){
+                        difference = taskDate.getTime() - currentTime.getTime();
+                        Log.i("diff",String.valueOf(difference));
+                        Log.i("diff","sadasda");
+                        if(difference < 0){
+                            // task outdated
+//                            Log.i("diff", String.valueOf(currentTime));
 
-                Log.i(TASK, taskLatitude.toString());
-                Log.i(TASK, taskLongitude.toString());
-                Log.i(TASK, currentLatitude.toString());
-                Log.i(TASK, currentLongitude.toString());
-                Log.i(TASK, String.valueOf(distance));
+                            mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+                            DatabaseReference taskRef = mDatabaseReference.child(uid).child("LocationBased").child(ds.getKey());
 
-                if(distance < 0.1){
-                    sendNotification(taskname, distance);
+                            taskRef.child("taskStatus").setValue("OutDated");
+                        }
+                    }
+
+
+                    // lat long notification
+
+                    taskLatitude = taskObj.getLatitude(); // retrieved task latitude
+                    taskLongitude = taskObj.getLongitude(); // retrieved task longitude
+
+                    // calculate distance between current latitude and longitude
+                    // https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude-what-am-i-doi
+                    final int R = 6371; // Radius of the earth
+
+                    double latDistance = Math.toRadians(currentLatitude - taskLatitude);
+                    double lonDistance = Math.toRadians(currentLongitude - taskLongitude);
+
+                    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                            + Math.cos(Math.toRadians(currentLatitude)) * Math.cos(Math.toRadians(taskLatitude))
+                            * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+                    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    double distance = R * c ;
+
+                    Log.i(TASK, taskLatitude.toString());
+                    Log.i(TASK, taskLongitude.toString());
+                    Log.i(TASK, currentLatitude.toString());
+                    Log.i(TASK, currentLongitude.toString());
+                    Log.i(TASK, String.valueOf(distance));
+
+                    if(distance < 0.1){
+                        sendNotification(ds.getKey(),taskObj.getTask(), distance);
+                    }
+
+
                 }
 
             }
@@ -140,7 +186,7 @@ public class TrackLocationService extends Service {
         return Service.START_STICKY;
     }
 
-    public void sendNotification(String task, Double distance){
+    public void sendNotification(String taskId,String task, Double distance){
         // https://www.tutorialspoint.com/android/android_notifications.htm
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,"LocationBasedNotification")
@@ -149,7 +195,7 @@ public class TrackLocationService extends Service {
                 .setContentText("Task " + task + " is " + distance * 1000 + " meters away.");
 
         Intent intent = new Intent(this, TrackStatus.class);
-        intent.putExtra("TaskName",taskname);
+        intent.putExtra("TaskName",task);
         intent.putExtra("TaskId",taskId);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(TrackStatus.class);

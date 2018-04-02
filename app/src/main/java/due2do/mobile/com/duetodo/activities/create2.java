@@ -232,10 +232,16 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                     db1.setValue(passedIntent);
                     Toast.makeText(due2do.mobile.com.duetodo.activities.create2.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
+
                     taskId = passedIntent.getKey();
                     Intent intent = new Intent(create2.this, TrackLocationService.class);
                     intent.putExtra("TaskName",taskName.getText().toString());
                     intent.putExtra("TaskId",taskId);
+                    intent.putExtra("Day",model.getDay());
+                    intent.putExtra("Month",model.getMonth());
+                    intent.putExtra("Year",model.getYear());
+                    intent.putExtra("Day",model.getMinute());
+                    intent.putExtra("Day",model.getHour());
                     startService(intent);
 
                     Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.create2.this, to_do.class);
@@ -265,10 +271,15 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                             mDatabaseReference.setValue(model);
 
 
-                            Toast.makeText(create2.this, taskId,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(create2.this, "Task Added",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(create2.this, TrackLocationService.class);
                             intent.putExtra("TaskName",taskName.getText().toString());
                             intent.putExtra("TaskId",taskId);
+                            intent.putExtra("Day",model.getDay());
+                            intent.putExtra("Month",model.getMonth());
+                            intent.putExtra("Year",model.getYear());
+                            intent.putExtra("Minute",model.getMinute());
+                            intent.putExtra("Hour",model.getHour());
                             startService(intent);
 
                             Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.create2.this, to_do.class);
@@ -304,11 +315,11 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         if(passedIntent != null){
             passedIntent.setYear(String.valueOf(datePicker.getYear()));
-            passedIntent.setMonth(String.valueOf(datePicker.getMonth()));
+            passedIntent.setMonth(String.valueOf(datePicker.getMonth() + 1));
             passedIntent.setDay(String.valueOf(datePicker.getDayOfMonth()));
         }else{
             model.setYear(String.valueOf(datePicker.getYear()));
-            model.setMonth(String.valueOf(datePicker.getMonth()));
+            model.setMonth(String.valueOf(datePicker.getMonth() + 1));
             model.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
         }

@@ -38,6 +38,7 @@ import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
 import due2do.mobile.com.duetodo.model.Task;
 import due2do.mobile.com.duetodo.services.NotificationService;
+import due2do.mobile.com.duetodo.services.TrackLocationService;
 
 public class to_do extends AppCompatActivity {
 
@@ -115,13 +116,17 @@ public class to_do extends AppCompatActivity {
         Intent intent = new Intent(this, NotificationService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
 
+        Intent locationintent = new Intent(this, TrackLocationService.class);
+        PendingIntent pendinglocIntent = PendingIntent.getService(this, 0, locationintent, 0);
+
+
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 0); // first time
         long frequency = 60 * 1000; // in ms
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendingIntent);
-
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), frequency, pendinglocIntent);
 
         //to go to next date
         next.setOnClickListener(new View.OnClickListener() {
