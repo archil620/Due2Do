@@ -26,6 +26,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
+                android:textStyle="bold"
                 android:background="@null"
                 android:hint="Remind me for..."
                 android:inputType="textCapSentences"

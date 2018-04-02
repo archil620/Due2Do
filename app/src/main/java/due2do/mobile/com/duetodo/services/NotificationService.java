@@ -80,19 +80,14 @@ public class NotificationService extends Service {
                         e.printStackTrace();
                     }
 
-                    diff = storedDate.getTime() - currentTime.getTime();
+                    if(storedDate != null){
+                        diff = storedDate.getTime() - currentTime.getTime();
 
-                    if ((diff < 900000) && (diff > 0)) {
-                        UtilityClass utilityClass = new UtilityClass();
-                        utilityClass.NotificationManager(NotificationService.this, camrem);
+                        if ((diff < 900000) && (diff > 0)) {
+                            UtilityClass utilityClass = new UtilityClass();
+                            utilityClass.NotificationManager(NotificationService.this, camrem);
+                        }
                     }
-
-                    Log.i(TAG, date);
-                    Log.i(TAG, String.valueOf(storedDate));
-                    Log.i(TAG, String.valueOf(currentTime));
-                    Log.i(TAG, String.valueOf(storedDate.getTime()));
-                    Log.i(TAG, String.valueOf(currentTime.getTime()));
-                    Log.i(TAG, String.valueOf(diff));
                 }
 
                 for (DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()) {
@@ -111,13 +106,6 @@ public class NotificationService extends Service {
                         UtilityClass utilityClass = new UtilityClass();
                         utilityClass.NotificationManager(NotificationService.this, camrem);
                     }
-
-                    Log.i(TAG, date);
-                    Log.i(TAG, String.valueOf(storedDate));
-                    Log.i(TAG, String.valueOf(currentTime));
-                    Log.i(TAG, String.valueOf(storedDate.getTime()));
-                    Log.i(TAG, String.valueOf(currentTime.getTime()));
-                    Log.i(TAG, String.valueOf(diff));
                 }
             }
 

@@ -47,6 +47,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     private final int REQUEST_CODE = 99;
     EditText eventName, location;
     ImageButton btPick;
+    Task passedIntent2 = new Task();
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -82,6 +83,20 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         int currentMonth = c.get(Calendar.MONTH);
         final int today = c.get(Calendar.DAY_OF_MONTH);
 
+        passedIntent2 = (Task) getIntent().getSerializableExtra("clickedData");
+
+        if (passedIntent2 != null) {
+            eventName.setText(passedIntent2.getTask());
+            date.setText(passedIntent2.getDay() + "/" + passedIntent2.getMonth() + "/" + passedIntent2.getYear());
+            time.setText(passedIntent2.getHour() + ":" + passedIntent2.getMinute());
+            location.setText(passedIntent2.getLocation());
+            contactList =  passedIntent2.getContactList();
+            adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1,
+                    contactList);
+            setListAdapter(adapter);
+        }
+
         datePickerDialog = new DatePickerDialog(
                 this, due2do.mobile.com.duetodo.activities.Event.this, currentYear, currentMonth, today);
 
@@ -111,7 +126,6 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
-
 
         //Database
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -224,7 +238,6 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                                                 contactList.add(numName);
                                                 adapter.notifyDataSetChanged();
                                                 flag = 1;
-
                                             }
                                         }
                                         cursor.close();
@@ -242,7 +255,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         eventReminder.setYear(String.valueOf(datePicker.getYear()));
-        eventReminder.setMonth(String.valueOf(datePicker.getMonth()));
+        eventReminder.setMonth(String.valueOf(datePicker.getMonth() + 1));
         eventReminder.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
         date.setText(dayOfMonth + "/" + month + "/" + year);
