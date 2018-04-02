@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="25dp"
-            android:background="@color/colorCyan"
+            android:background="@color/colorLightSteelBlue"
             android:orientation="vertical">
 
             <EditText
@@ -149,7 +149,6 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5dp"
-            android:background="@color/deleteBtn"
             android:text="CLEAR" />
 
 

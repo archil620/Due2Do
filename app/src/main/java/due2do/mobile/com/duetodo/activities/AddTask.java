@@ -137,10 +137,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                 }
 
             }
-
             //time.setText();
-
-
         }
 
 
@@ -195,61 +192,66 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         createTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                priority = spinner.getSelectedItem().toString();
-                task.setPriority(priority);
-                if (passedIntent != null) {
-                    passedIntent.setTask(String.valueOf(taskName.getText()));
-                    DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(passedIntent.getKey());
-                    db1.setValue(passedIntent);
-                    Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Updated", Toast.LENGTH_SHORT).show();
+                if(taskName.getText().toString().length() != 0 && date.getText().toString().length() != 0){
+                    priority = spinner.getSelectedItem().toString();
+                    task.setPriority(priority);
+                    if (passedIntent != null) {
+                        passedIntent.setTask(String.valueOf(taskName.getText()));
+                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(passedIntent.getKey());
+                        db1.setValue(passedIntent);
+                        Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
-                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
-                    startActivity(displayTask);
+                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                        startActivity(displayTask);
 
-                } else {
-                    createQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
-                    createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                        Task reminder = new Task();
+                    } else {
+                        createQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
+                        createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            Task reminder = new Task();
 
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                reminder = ds.getValue(Task.class);
-                            }
-                            if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
-                                int val = Integer.valueOf(reminder.getId().substring(1));
-                                val = val + 1;
-                                task.setId("C" + val);
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    reminder = ds.getValue(Task.class);
+                                }
+                                if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
+                                    int val = Integer.valueOf(reminder.getId().substring(1));
+                                    val = val + 1;
+                                    task.setId("C" + val);
 
-                            } else {
-                                task.setId("C1");
+                                } else {
+                                    task.setId("C1");
 
-                            }
-                            task.setTask(String.valueOf(taskName.getText()));
-                            if (flagValue.size() >= 1) {
-                                if ((flagValue.get("Done")).equals("Yes")) {
+                                }
+                                task.setTask(String.valueOf(taskName.getText()));
+                                if (flagValue.size() >= 1) {
+                                    if ((flagValue.get("Done")).equals("Yes")) {
+                                        mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
+                                        Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
+
+                                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                                        startActivity(displayTask);
+                                    } else {
+                                        Toast.makeText(AddTask.this, "Image Still Uploading", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
                                     mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
                                     Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
 
                                     Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
                                     startActivity(displayTask);
-                                } else {
-                                    Toast.makeText(AddTask.this, "Image Still Uploading", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
-                                mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
-                                Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
-
-                                Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
-                                startActivity(displayTask);
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
+
+                }else{
+                    Toast.makeText(getApplicationContext(), "Task name and date required", Toast.LENGTH_SHORT).show();
                 }
 
 
