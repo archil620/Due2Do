@@ -1,6 +1,5 @@
 package due2do.mobile.com.duetodo.activities;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -14,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,7 +58,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
     private ImageButton setTaskBtn;
     private LatLng ltl = new LatLng(0, 0);
     private int taskFlag = 0;
-    LocationModel model = new LocationModel();
+    Task model = new Task();
     Query createQuery;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -65,21 +66,23 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
     // get uid
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private String uid = firebaseAuth.getCurrentUser().getUid();
+    Task passedIntent = new Task();
+    Marker oldMarker;
+    Marker newMarkr;
 
 
     // Database
     private DatabaseReference mDatabaseReference;
-
+    LatLng oldlatLng;
     private String taskId;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create2);
 
 
-        setTitle("Create Task");
+        setTitle("Create Location Task");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,6 +98,16 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
         int currentYear = c.get(Calendar.YEAR);
         int currentMonth = c.get(Calendar.MONTH);
         final int today = c.get(Calendar.DAY_OF_MONTH);
+
+        passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
+
+        if(passedIntent != null){
+            taskName.setText(passedIntent.getTask());
+            date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
+            time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
+            oldlatLng = new LatLng(passedIntent.getLatitude(),passedIntent.getLongitude());
+
+        }
 
 
         //https://stackoverflow.com/questions/6451837/how-do-i-set-the-current-date-in-a-datepicker
@@ -151,10 +164,18 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
         mMap = googleMap;
         taskFlag = 0;
         // showing the current location
-        Location location = getLocation();
+        final Location location = getLocation();
         LatLng currentLoc = new LatLng(location.getLatitude(),location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(currentLoc).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc,15));
+        if(passedIntent != null){
+
+            oldMarker = mMap.addMarker(new MarkerOptions().position(oldlatLng).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(oldlatLng,15));
+        }else{
+            newMarkr = mMap.addMarker(new MarkerOptions().position(currentLoc).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc,15));
+
+        }
+
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 
@@ -167,6 +188,9 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                 // remove marker when new one added
                 if(taskFlag == 0) {
                     taskFlag = 1;
+                    if(passedIntent != null){
+                        oldMarker.remove();
+                    }
                     mMap.addMarker(new MarkerOptions().position(latLng).title("Custom location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                     CircleOptions circleOptions = new CircleOptions()
                             .center(latLng)
@@ -176,6 +200,13 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                             .strokeWidth(5);
                     mMap.addCircle(circleOptions);
                     ltl = latLng;
+                    if(passedIntent != null){
+                        passedIntent.setLatitude(ltl.latitude);
+                        passedIntent.setLongitude(ltl.longitude);
+                    }else{
+                        model.setLatitude(ltl.latitude);
+                        model.setLongitude(ltl.longitude);
+                    }
                 }
             }
         });
@@ -184,46 +215,73 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
         final FirebaseUser mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        //taskId = mDatabaseReference.getKey();
+
 
         setTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                model.setTaskName(String.valueOf(taskName.getText()));
+                model.setTask(String.valueOf(taskName.getText()));
                 model.setTaskStatus("Active");
                 model.setLatitude(ltl.latitude);
                 model.setLongitude(ltl.longitude);
 
-                createQuery = mDatabaseReference.child(mUser.getUid()).child("LocationBased").orderByKey().limitToLast(1);
-                createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    Task reminder = new Task();
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            reminder = ds.getValue(Task.class);
+
+                if(passedIntent != null){
+                    passedIntent.setTask(String.valueOf(taskName.getText()));
+                    DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("LocationBased").child(passedIntent.getKey());
+                    db1.setValue(passedIntent);
+                    Toast.makeText(due2do.mobile.com.duetodo.activities.create2.this, "Task Updated", Toast.LENGTH_SHORT).show();
+
+                    taskId = passedIntent.getKey();
+                    Intent intent = new Intent(create2.this, TrackLocationService.class);
+                    intent.putExtra("TaskName",taskName.getText().toString());
+                    intent.putExtra("TaskId",taskId);
+                    startService(intent);
+
+                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.create2.this, to_do.class);
+                    startActivity(displayTask);
+
+                }else{
+                    createQuery = mDatabaseReference.child(mUser.getUid()).child("LocationBased").orderByKey().limitToLast(1);
+
+                    createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        Task reminder = new Task();
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                reminder = ds.getValue(Task.class);
+                            }
+                            if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
+                                int val = Integer.valueOf(reminder.getId().substring(1));
+                                val = val + 1;
+                                model.setId("L" + val);
+
+                            } else {
+                                model.setId("L1");
+
+                            }
+                            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child(mUser.getUid()).child("LocationBased").push();
+                            taskId = mDatabaseReference.getKey();
+                            mDatabaseReference.setValue(model);
+
+
+                            Toast.makeText(create2.this, taskId,Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(create2.this, TrackLocationService.class);
+                            intent.putExtra("TaskName",taskName.getText().toString());
+                            intent.putExtra("TaskId",taskId);
+                            startService(intent);
+
+                            Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.create2.this, to_do.class);
+                            startActivity(displayTask);
+
                         }
-                        if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
-                            int val = Integer.valueOf(reminder.getId().substring(1));
-                            val = val + 1;
-                            model.setId("C" + val);
-
-                        } else {
-                            model.setId("C1");
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
-                        mDatabaseReference.child(mUser.getUid()).child("LocationBased").push().setValue(model);
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    });
+                }
 
-                    }
-                });
-
-                Toast.makeText(create2.this, "Task Added",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(create2.this, TrackLocationService.class);
-                intent.putExtra("TaskName",taskName.getText().toString());
-                intent.putExtra("TaskId",taskId);
-                startService(intent);
 
             }
         });
@@ -232,7 +290,10 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
             @Override
             public void onClick(View view) {
                 taskName.setText("");
+                date.setText("");
+                time.setText("");
                 mMap.clear();
+
                 onMapReady(mMap);
 
             }
@@ -241,17 +302,31 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        model.setYear(String.valueOf(datePicker.getYear()));
-        model.setMonth(String.valueOf(datePicker.getMonth()));
-        model.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        if(passedIntent != null){
+            passedIntent.setYear(String.valueOf(datePicker.getYear()));
+            passedIntent.setMonth(String.valueOf(datePicker.getMonth()));
+            passedIntent.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        }else{
+            model.setYear(String.valueOf(datePicker.getYear()));
+            model.setMonth(String.valueOf(datePicker.getMonth()));
+            model.setDay(String.valueOf(datePicker.getDayOfMonth()));
+
+        }
+
+
         date.setText(i + "/" + i1 + "/" + i2);
 
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        model.setHour(String.valueOf(i));
-        model.setMinute(String.valueOf(i1));
+        if(passedIntent !=null){
+            passedIntent.setHour(String.valueOf(i));
+            passedIntent.setMinute(String.valueOf(i1));
+        }else{
+            model.setHour(String.valueOf(i));
+            model.setMinute(String.valueOf(i1));
+        }
 
         time.setText(i + ":" + i1);
     }

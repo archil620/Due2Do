@@ -25,7 +25,9 @@ import java.util.List;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.activities.AddTask;
 
+import due2do.mobile.com.duetodo.activities.Event;
 import due2do.mobile.com.duetodo.activities.SingleTask;
+import due2do.mobile.com.duetodo.activities.create2;
 import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.model.Task;
 
@@ -92,8 +94,17 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                     deleteTask = reminderList.get(getAdapterPosition());
                     reminderList.remove(getAdapterPosition());
 
-                    DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(deleteTask.getKey());
-                    db1.setValue(null);
+                    if(deleteTask.getId().contains("C")) {
+                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(deleteTask.getKey());
+                        db1.setValue(null);
+                    }else if(deleteTask.getId().contains("L")) {
+                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("LocationBased").child(deleteTask.getKey());
+                        db1.setValue(null);
+                    }else{
+                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("EventTask").child(deleteTask.getKey());
+                        db1.setValue(null);
+                    }
+
                     Toast.makeText(mCtx,"Deleted", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -101,10 +112,24 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
             editEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent singleTaskAvtivity = new Intent(context,AddTask.class);
-                    singleTaskAvtivity.putExtra("clickedData",reminderList.get(getAdapterPosition()));
-                    context.startActivity(singleTaskAvtivity);
+                    Task task = reminderList.get(getAdapterPosition());
+                    if(task.getId().contains("C")){
+                        Context context = view.getContext();
+                        Intent singleTaskAvtivity = new Intent(context,AddTask.class);
+                        singleTaskAvtivity.putExtra("clickedData",reminderList.get(getAdapterPosition()));
+                        context.startActivity(singleTaskAvtivity);
+                    }else if(task.getId().contains("L")){
+                        Context context = view.getContext();
+                        Intent singleTaskAvtivity = new Intent(context,create2.class);
+                        singleTaskAvtivity.putExtra("clickedData",reminderList.get(getAdapterPosition()));
+                        context.startActivity(singleTaskAvtivity);
+                    }else{
+                        Context context = view.getContext();
+                        Intent singleTaskAvtivity = new Intent(context,Event.class);
+                        singleTaskAvtivity.putExtra("clickedData",reminderList.get(getAdapterPosition()));
+                        context.startActivity(singleTaskAvtivity);
+                    }
+
                 }
             });
 

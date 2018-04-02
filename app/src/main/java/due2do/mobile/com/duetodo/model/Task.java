@@ -23,6 +23,33 @@ public class Task implements Serializable {
     private String location;
     private String key;
     private String priority;
+    private double latitude;
+    private double longitude;
+    private String taskStatus;
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
+    }
 
     public String getPriority() {
         return priority;

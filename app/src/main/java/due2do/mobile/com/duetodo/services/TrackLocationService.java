@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,10 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.activities.TrackStatus;
+import due2do.mobile.com.duetodo.activities.create2;
 
 public class TrackLocationService extends Service {
 
     private String taskname;
+    private String taskId;
 
     // get uid
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -53,8 +56,6 @@ public class TrackLocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-
         // get current location
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -93,15 +94,13 @@ public class TrackLocationService extends Service {
 
             }
         });
-
-
-
-
-
         // retrieve task latlong from the database
-        taskname = intent.getExtras().getString("TaskName");
+        taskname = intent.getStringExtra("TaskName");
+        taskId = intent.getStringExtra("TaskId");
+
+        Toast.makeText(TrackLocationService.this, taskId,Toast.LENGTH_SHORT).show();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference taskRef = mDatabaseReference.child(uid).child("LocationBased").child(taskname);
+        DatabaseReference taskRef = mDatabaseReference.child(uid).child("LocationBased").child(taskId);
         taskRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -150,6 +149,8 @@ public class TrackLocationService extends Service {
                 .setContentText("Task " + task + " is " + distance * 1000 + " meters away.");
 
         Intent intent = new Intent(this, TrackStatus.class);
+        intent.putExtra("TaskName",taskname);
+        intent.putExtra("TaskId",taskId);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(TrackStatus.class);
 
