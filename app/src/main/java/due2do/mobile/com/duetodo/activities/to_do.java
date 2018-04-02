@@ -2,6 +2,7 @@ package due2do.mobile.com.duetodo.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -64,6 +67,9 @@ public class to_do extends AppCompatActivity {
     java.util.Calendar c;
     SimpleDateFormat month_index;
 
+    private DatePickerDialog tdDatePicker;
+    EditText tod;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +86,7 @@ public class to_do extends AppCompatActivity {
         fabantirotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
         taskName = findViewById(R.id.TaskTitle);
         taskDate = findViewById(R.id.date);
-        td = findViewById(R.id.today);
+        tod = findViewById(R.id.today);
         next = findViewById(R.id.next);
         previous = findViewById(R.id.previous);
 
@@ -96,7 +102,19 @@ public class to_do extends AppCompatActivity {
         final String month = month_index.format(c.getTime());
         String cmonth = m.format(c.getTime());
         String cday = d.format(c.getTime());
-        td.setText(String.valueOf(cmonth + ", " + cday));
+        //tod.setText(String.valueOf(cmonth + ", " + cday));
+
+        tod.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(to_do.this, date, c
+                        .get(Calendar.YEAR), c.get(Calendar.MONTH),
+                        c.get(Calendar.DAY_OF_MONTH)).show();
+                displayData(c);
+            }
+        });
 
         //  to display today's task
         displayData(c);
@@ -206,7 +224,30 @@ public class to_do extends AppCompatActivity {
                 startActivity(new Intent(to_do.this,Event.class));
             }
         });
+    } //end of oncreate
+
+    Calendar myCalendar = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // TODO Auto-generated method stub
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        }
+
+    };
+
+    private void updateLabel() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+
+        tod.setText(sdf.format(myCalendar.getTime()));
+        displayData(myCalendar);
     }
+
 
     private void displayData(Calendar c) {
         recyclerView = (RecyclerView) findViewById(R.id.recylerView);
@@ -216,7 +257,7 @@ public class to_do extends AppCompatActivity {
         final String cmonth = m.format(c.getTime());
         final String cday = d.format(c.getTime());
         final String month = month_index.format(c.getTime());
-        td.setText(String.valueOf(cmonth + ", " + cday));
+        tod.setText(String.valueOf(cmonth + ", " + cday));
 
         DatabaseReference readRef = mDatabaseReference.child(mUser.getUid());
 
