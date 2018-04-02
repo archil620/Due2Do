@@ -92,6 +92,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
             }
         });

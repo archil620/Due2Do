@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,14 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         holder.textViewTitle.setText(reminder.getTask());
         holder.textViewDate.setText(reminder.getDay()+"/"+reminder.getMonth()+"/"+reminder.getYear());
         holder.textViewPriority.setText(reminder.getPriority());
+
+        if(reminder.getId().contains("C")){
+            holder.image.setBackgroundResource(R.drawable.ic_camera);
+        }else if(reminder.getId().contains("L")){
+            holder.image.setBackgroundResource(R.drawable.ic_location);
+        }else{
+            holder.image.setBackgroundResource(R.drawable.ic_group);
+        }
     }
 
     @Override
@@ -74,6 +83,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
 
         TextView textViewTitle, textViewDate, textViewPriority;
         ImageButton delete,editEvent;
+        ImageView image;
 
 
         public ReminderViewHolder(View itemView) {
@@ -82,6 +92,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
             textViewTitle = itemView.findViewById(R.id.TaskTitle);
             textViewDate = itemView.findViewById(R.id.date);
             textViewPriority = itemView.findViewById(R.id.priority);
+            image = itemView.findViewById(R.id.img);
             delete = itemView.findViewById(R.id.delevent);
             editEvent = itemView.findViewById(R.id.editEvent);
             delete.setOnClickListener(new View.OnClickListener() {
