@@ -297,19 +297,8 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     }
 
     private void showPictureDialog() {
-
-        if (myBitmap != null) {
-            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-            intent.setAction(Intent.ACTION_VIEW);
-            if (passedIntent != null) {
-                intent.setDataAndType(Uri.parse("file:/" + passedIntent.getImageUri()), "image/*");
-            } else {
-                intent.setDataAndType(Uri.parse("file:/" + mCurrentPhotoPath), "image/*");
-            }
-            startActivity(intent);
-        } else {
             takePhotoFromCamera();
-        }
+
 
     }
 

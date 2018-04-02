@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.utils.AutoLoginReference;
 
 /*
 Created by Bhargav Dalal
@@ -114,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                String[] email = account.getEmail().split("\\@");
+                AutoLoginReference.setUserName(MainActivity.this, email[0]);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately

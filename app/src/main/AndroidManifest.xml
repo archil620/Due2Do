@@ -16,7 +16,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
 
         <!-- https://stackoverflow.com/questions/47448297/how-to-get-uri-of-captured-photo -->
         <provider
@@ -29,7 +30,7 @@
                 android:resource="@xml/provider_paths"></meta-data>
         </provider>
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,6 +55,7 @@
             android:name="activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.MainActivity"/>
         <activity android:name=".activities.AddTask" />
         <activity android:name=".activities.SingleTask" />
         <activity android:name=".activities.CameraActivity" />
