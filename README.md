@@ -18,7 +18,7 @@ Due 2 Do is design to boost your productivity and make your life easier.
 **google-gson:** Gson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object. Source [here](https://github.com/google/gson)
 
 ## Installation Notes
-Minimum SDK version - 23 <br \>
+Minimum SDK version - 23 <br />
 Minimum CompileSKDversion - 26
 
 ## Code Examples
