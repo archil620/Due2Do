@@ -19,7 +19,8 @@ Due 2 Do is design to boost your productivity and make your life easier.
 
 ## Installation Notes
 Minimum SDK version - 23 <br />
-Minimum CompileSKDversion - 26
+Minimum CompileSKDversion - 26 <br />
+Device's GPS needs to be keep on. 
 
 ## Code Examples
 **Problem 1: Unable to store and retrieve the image if another device is used with same user.**
