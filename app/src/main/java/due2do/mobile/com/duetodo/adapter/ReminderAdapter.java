@@ -68,21 +68,20 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         return reminderList.size();
     }
 
-    class ReminderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ReminderViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewTitle, textViewDate, textViewPriority;
-        ImageButton delete;
+        ImageButton delete,editEvent;
 
 
         public ReminderViewHolder(View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(this);
-
             textViewTitle = itemView.findViewById(R.id.TaskTitle);
             textViewDate = itemView.findViewById(R.id.date);
             textViewPriority = itemView.findViewById(R.id.priority);
             delete = itemView.findViewById(R.id.delevent);
+            editEvent = itemView.findViewById(R.id.editEvent);
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -99,17 +98,18 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                 }
             });
 
+            editEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent singleTaskAvtivity = new Intent(context,AddTask.class);
+                    singleTaskAvtivity.putExtra("clickedData",reminderList.get(getAdapterPosition()));
+                    context.startActivity(singleTaskAvtivity);
+                }
+            });
 
 
-        }
 
-        @Override
-        public void onClick(View view) {
-            Log.d(TAG, "onClick " + reminderList.get(getAdapterPosition()));
-            Context context = view.getContext();
-            Intent singleTaskAvtivity = new Intent(context,AddTask.class);
-            singleTaskAvtivity.putExtra("clickedData",reminderList.get(getAdapterPosition()));
-            context.startActivity(singleTaskAvtivity);
         }
     }
 }

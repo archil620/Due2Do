@@ -41,6 +41,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -107,18 +108,34 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
         passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
 
-        if (passedIntent != null) {
-            taskName.setText(passedIntent.getTask());
+        if (passedIntent != null) {taskName.setText(passedIntent.getTask());
             date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
             time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
+            FirebaseStorage storage = FirebaseStorage.getInstance("gs://due2do-app.appspot.com");
+            StorageReference ref =storage.getReferenceFromUrl(passedIntent.getImageUri());
+            try {
+                final File file = File.createTempFile("Images","JPG");
+                ref.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                        myBitmap = Bitmap.createScaledBitmap(myBitmap, 500, 500, false);
+                        displayimage.setImageBitmap(myBitmap);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                    }
+                });
 
-            String photoPath = Environment.getExternalStorageDirectory() + "/abc.jpg";
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            Bitmap myBitmap = BitmapFactory.decodeFile(passedIntent.getImageUri());
-            mCurrentPhotoPath = passedIntent.getImageUri();
-            myBitmap = Bitmap.createScaledBitmap(myBitmap, 500, 500, false);
-            displayimage.setImageBitmap(myBitmap);
             //time.setText();
+
+
 
         }
 
@@ -178,6 +195,10 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                     passedIntent.setTask(String.valueOf(taskName.getText()));
                     DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(passedIntent.getKey());
                     db1.setValue(passedIntent);
+                    Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Updated", Toast.LENGTH_SHORT).show();
+
+                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                    startActivity(displayTask);
 
                 } else {
                     createQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
