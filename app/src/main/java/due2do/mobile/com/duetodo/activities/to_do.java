@@ -97,6 +97,10 @@ public class to_do extends AppCompatActivity {
         String cday = d.format(c.getTime());
         td.setText(String.valueOf(cmonth + ", " + cday));
 
+        //  to display today's task
+        displayData(c);
+
+
         // database
         final FirebaseUser mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -122,7 +126,7 @@ public class to_do extends AppCompatActivity {
         //to go to next date
         next.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {               //https://stackoverflow.com/questions/20582632/how-to-get-the-next-date-when-click-on-button-in-android
                 c.add(Calendar.DATE, 1);
                 displayData(c);
             }
@@ -131,7 +135,7 @@ public class to_do extends AppCompatActivity {
         //to go to previous date
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {           //https://stackoverflow.com/questions/20582632/how-to-get-the-next-date-when-click-on-button-in-android
                 c.add(Calendar.DATE, -1);
                 displayData(c);
             }
@@ -197,45 +201,6 @@ public class to_do extends AppCompatActivity {
                 startActivity(new Intent(to_do.this,Event.class));
             }
         });
-
-
-
-        /*recyclerView = (RecyclerView) findViewById(R.id.recylerView);
-        recyclerView.setHasFixedSize(true);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //Read From Firebase Database
-        readRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                reminderList.clear();
-                for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
-
-                    reminder = ds.getValue(Task.class);
-                    reminderList.add(reminder);
-                }
-
-                for(DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()){
-                    reminder = ds.getValue(Task.class);
-                    reminderList.add(reminder);
-                }
-
-                for(DataSnapshot ds : dataSnapshot.child("EventTask").getChildren()){
-                    reminder = ds.getValue(Task.class);
-                    reminderList.add(reminder);
-                }
-
-                adapter = new ReminderAdapter(to_do.this, reminderList);
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-
     }
 
     private void displayData(Calendar c) {

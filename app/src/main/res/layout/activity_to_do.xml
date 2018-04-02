@@ -20,18 +20,6 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <ImageButton
-            android:id="@+id/add_task"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom|right"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/round_btn"
-            android:contentDescription="TODO"
-            android:src="@drawable/add_task"
-            android:textColor="@color/colorGlitter"
-            android:textSize="18sp" />
-
     </FrameLayout>
 
     <TextView
@@ -90,7 +78,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/frame"
         android:layout_marginTop="12dp"
-        android:background="@drawable/round_btn2"
+        android:background="@drawable/round_btn"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
@@ -101,10 +89,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_above="@+id/recylerView"
-        android:layout_marginBottom="13dp"
-        android:layout_marginEnd="12dp"
         android:layout_toStartOf="@+id/done_btn"
-        android:background="@drawable/round_btn2"
+        android:background="@drawable/round_btn"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
@@ -116,7 +102,7 @@
         android:layout_height="40dp"
         android:layout_alignEnd="@+id/today"
         android:layout_alignTop="@+id/camera_btn"
-        android:background="@drawable/round_btn2"
+        android:background="@drawable/round_btn"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
@@ -126,14 +112,27 @@
         android:id="@+id/done_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_above="@+id/add_people_btn"
-        android:layout_marginBottom="14dp"
-        android:layout_toStartOf="@+id/camera_btn"
-        android:background="@drawable/round_btn2"
+        android:layout_above="@+id/add_task"
+        android:layout_marginBottom="11dp"
+        android:layout_toStartOf="@+id/next"
+        android:background="@drawable/round_btn"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
-        app:srcCompat="@drawable/task_done" />
+        app:srcCompat="@drawable/done_task" />
+
+    <ImageButton
+        android:id="@+id/add_task"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/recylerView"
+        android:layout_gravity="bottom|right"
+        android:layout_toEndOf="@+id/today"
+        android:background="@drawable/round_button_demo"
+        android:contentDescription="TODO"
+        android:src="@drawable/add_task"
+        android:textColor="@color/colorGlitter"
+        android:textSize="18sp" />
 
 
 </RelativeLayout>
