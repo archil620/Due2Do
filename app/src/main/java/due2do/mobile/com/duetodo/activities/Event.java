@@ -26,8 +26,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +56,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     private FirebaseDatabase database;
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
+    Query createQuery;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -125,17 +130,44 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
 
                     for (int i = 0; i < contactList.size(); i++) {
                         String phoneNo = contactList.get(i);
+                        String contactDetails[] = phoneNo.split(",");
                         String message = "You have been added to an event named " + eventName.getText().toString() + " on " +
-                                eventReminder.getDay() + "/" + eventReminder.getMonth() + "/" + eventReminder.getYear() + "at " + eventReminder.getHour() + ":" + eventReminder.getMinute() + ".The vemue is " +
-                                location.getText().toString();
+                                eventReminder.getDay() + "/" + eventReminder.getMonth() + "/" + eventReminder.getYear() + " at " + eventReminder.getHour() + ":" + eventReminder.getMinute() + ".The venue is " +
+                                location.getText().toString()+".";
                         if (adapter != null) {
-                            sendMessage(phoneNo, message);
+                            sendMessage(contactDetails[1], message);
 
                         } else {
                             Toast.makeText(getApplicationContext(), "Phone or message field is empty", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
+                    createQuery = mDatabaseReference.child(mUser.getUid()).child("EventTask").orderByKey().limitToLast(1);
+                    createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        Task reminder = new Task();
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                reminder = ds.getValue(Task.class);
+                            }
+                            if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
+                                int val = Integer.valueOf(reminder.getId().substring(1));
+                                val = val + 1;
+                                eventReminder.setId("E" + val);
+
+                            } else {
+                                eventReminder.setId("E1");
+
+                            }
+                            mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                     Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
                     startActivity(displayTask);
                 } else {
@@ -188,9 +220,11 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                                             contactName = cursor.getString(0);
                                             Log.i("name", contactName);
                                             if (flag == 0) {
-                                                contactList.add(contactName);
+                                                String numName = contactName + "," + num;
+                                                contactList.add(numName);
                                                 adapter.notifyDataSetChanged();
                                                 flag = 1;
+
                                             }
                                         }
                                         cursor.close();
