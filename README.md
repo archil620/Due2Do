@@ -1,4 +1,4 @@
-# Project Title
+# Due 2 Do
 Due 2 Do is powerful to-do list aimed to facilitate one’s life. It can organize your task based
 on priority. Due 2 Do is a one-for-all option for the users where the task can be classified as a
 routine, location-based task and a gathering event task. The user can be carefree as Due 2 Do
