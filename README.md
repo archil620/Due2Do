@@ -18,11 +18,11 @@ Due 2 Do is design to boost your productivity and make your life easier.
 **google-gson:** Gson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object. Source [here](https://github.com/google/gson)
 
 ## Installation Notes
-Minimum SDK version - 23
+Minimum SDK version - 23 <br \>
 Minimum CompileSKDversion - 26
 
 ## Code Examples
-** Problem 1: Unable to store and retrieve the image if another device is used with same user.**
+**Problem 1: Unable to store and retrieve the image if another device is used with same user.**
 
 The application earlier was able to save the picture locally on the phone and hence when the device is change, the application was unable to retrieve the image.
 This issue was resolved by storing the image in the firebase storage instead of storing it in local storage.
@@ -54,7 +54,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 }
 ```
 
-** Problem 2: The application was directly accessing device services without asking user's permission.**
+**Problem 2: The application was directly accessing device services without asking user's permission.**
 
 Every application ask for the user's permission for giving access to device services such as camera, contact, storage and location services, etc. The application was earlier directly accessing these device services without user's permission. 
 Hence, here is a snapshot of the code which help us to solve this issue.
@@ -68,7 +68,7 @@ public void onRequestPermissionsResult(int requestCode, @NonNull String[] permis
 }
 ```
 
-** Problem 3: Difficulties in retreiving the contact number from the contact list.**
+**Problem 3: Difficulties in retreiving the contact number from the contact list.**
 
 It was difficult to fetch contact number from the contact list and also to display its respective name in a ListView.
 ```
