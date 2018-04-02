@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.app.Activity;
@@ -48,7 +49,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     EditText eventName, location;
     ImageButton btPick;
     Task passedIntent2 = new Task();
-
+    String priority;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     Task eventReminder = new Task();
@@ -58,6 +59,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
     Query createQuery;
+    Spinner spinner;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -83,19 +85,6 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         int currentMonth = c.get(Calendar.MONTH);
         final int today = c.get(Calendar.DAY_OF_MONTH);
 
-        passedIntent2 = (Task) getIntent().getSerializableExtra("clickedData");
-
-        if (passedIntent2 != null) {
-            eventName.setText(passedIntent2.getTask());
-            date.setText(passedIntent2.getDay() + "/" + passedIntent2.getMonth() + "/" + passedIntent2.getYear());
-            time.setText(passedIntent2.getHour() + ":" + passedIntent2.getMinute());
-            location.setText(passedIntent2.getLocation());
-            contactList =  passedIntent2.getContactList();
-            adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1,
-                    contactList);
-            setListAdapter(adapter);
-        }
 
         datePickerDialog = new DatePickerDialog(
                 this, due2do.mobile.com.duetodo.activities.Event.this, currentYear, currentMonth, today);
@@ -132,58 +121,104 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        spinner = (Spinner) findViewById(R.id.priority);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> spinneradapter = ArrayAdapter.createFromResource(this,
+                R.array.priority, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(spinneradapter);
+
+        passedIntent2 = (Task) getIntent().getSerializableExtra("clickedData");
+
+        if (passedIntent2 != null) {
+
+            eventName.setText(passedIntent2.getTask());
+            date.setText(passedIntent2.getDay() + "/" + passedIntent2.getMonth() + "/" + passedIntent2.getYear());
+            time.setText(passedIntent2.getHour() + ":" + passedIntent2.getMinute());
+            location.setText(passedIntent2.getLocation());
+            contactList = passedIntent2.getContactList();
+
+            adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1,
+                    contactList);
+            setListAdapter(adapter);
+        }
+
 
         createtask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (location.getText().toString().length() != 0 && eventName.getText().toString().length() != 0) {
                     //String phoneNo =txtPhoneNo.getText().toString();
-                    eventReminder.setTask(String.valueOf(eventName.getText()));
-                    eventReminder.setLocation(String.valueOf(location.getText()));
+
+                    if (passedIntent2 != null) {
+                        priority = spinner.getSelectedItem().toString();
+                        passedIntent2.setPriority(priority);
+                        passedIntent2.setTask(String.valueOf(eventName.getText()));
+                        passedIntent2.setLocation(String.valueOf(location.getText()));
+                        passedIntent2.setTask(String.valueOf(eventName.getText()));
+                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("EventTask").child(passedIntent2.getKey());
+                        db1.setValue(passedIntent2);
+                        Toast.makeText(due2do.mobile.com.duetodo.activities.Event.this, "Task Updated", Toast.LENGTH_SHORT).show();
+
+                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
+                        startActivity(displayTask);
 
 
-                    for (int i = 0; i < contactList.size(); i++) {
-                        String phoneNo = contactList.get(i);
-                        String contactDetails[] = phoneNo.split(",");
-                        String message = "You have been added to an event named " + eventName.getText().toString() + " on " +
-                                eventReminder.getDay() + "/" + eventReminder.getMonth() + "/" + eventReminder.getYear() + " at " + eventReminder.getHour() + ":" + eventReminder.getMinute() + ".The venue is " +
-                                location.getText().toString()+".";
-                        if (adapter != null) {
-                            sendMessage(contactDetails[1], message);
-
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Phone or message field is empty", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    createQuery = mDatabaseReference.child(mUser.getUid()).child("EventTask").orderByKey().limitToLast(1);
-                    createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                        Task reminder = new Task();
-
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                reminder = ds.getValue(Task.class);
-                            }
-                            if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
-                                int val = Integer.valueOf(reminder.getId().substring(1));
-                                val = val + 1;
-                                eventReminder.setId("E" + val);
+                    } else {
+                        priority = spinner.getSelectedItem().toString();
+                        eventReminder.setPriority(priority);
+                        eventReminder.setTask(String.valueOf(eventName.getText()));
+                        eventReminder.setLocation(String.valueOf(location.getText()));
+                        eventReminder.setTaskStatus("Active");
+                        for (int i = 0; i < contactList.size(); i++) {
+                            String phoneNo = contactList.get(i);
+                            String contactDetails[] = phoneNo.split(",");
+                            String message = "You have been added to an event named " + eventName.getText().toString() + " on " +
+                                    eventReminder.getDay() + "/" + eventReminder.getMonth() + "/" + eventReminder.getYear() + " at " + eventReminder.getHour() + ":" + eventReminder.getMinute() + ".The venue is " +
+                                    location.getText().toString() + ".";
+                            if (adapter != null) {
+                                sendMessage(contactDetails[1], message);
 
                             } else {
-                                eventReminder.setId("E1");
+                                Toast.makeText(getApplicationContext(), "Phone or message field is empty", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+
+                        createQuery = mDatabaseReference.child(mUser.getUid()).child("EventTask").orderByKey().limitToLast(1);
+                        createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            Task reminder = new Task();
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    reminder = ds.getValue(Task.class);
+                                }
+                                if (reminder.getId() != null && !(reminder.getId().isEmpty())) {
+                                    int val = Integer.valueOf(reminder.getId().substring(1));
+                                    val = val + 1;
+                                    eventReminder.setId("E" + val);
+
+                                } else {
+                                    eventReminder.setId("E1");
+
+                                }
+                                mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
                             }
-                            mDatabaseReference.child(mUser.getUid()).child("EventTask").push().setValue(eventReminder);
-                        }
+                        });
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
+                        startActivity(displayTask);
 
-                        }
-                    });
-
-                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
-                    startActivity(displayTask);
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter all fields", Toast.LENGTH_SHORT).show();
                 }
@@ -246,7 +281,12 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                             }
                         }
                     }
-                    eventReminder.setContactList(contactList);
+                    if (passedIntent2 != null) {
+                        passedIntent2.setContactList(contactList);
+                    } else {
+                        eventReminder.setContactList(contactList);
+                    }
+
                     break;
                 }
         }
@@ -254,17 +294,31 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        eventReminder.setYear(String.valueOf(datePicker.getYear()));
-        eventReminder.setMonth(String.valueOf(datePicker.getMonth() + 1));
-        eventReminder.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        if (passedIntent2 != null) {
+            passedIntent2.setYear(String.valueOf(datePicker.getYear()));
+            passedIntent2.setMonth(String.valueOf(datePicker.getMonth() + 1));
+            passedIntent2.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        } else {
+            eventReminder.setYear(String.valueOf(datePicker.getYear()));
+            eventReminder.setMonth(String.valueOf(datePicker.getMonth() + 1));
+            eventReminder.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
-        date.setText(dayOfMonth + "/" + month + "/" + year);
+        }
+
+
+        date.setText(dayOfMonth + "/" + String.valueOf(month + 1) + "/" + year);
+
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        eventReminder.setHour(String.valueOf(hourOfDay));
-        eventReminder.setMinute(String.valueOf(minute));
+        if (passedIntent2 != null) {
+            passedIntent2.setHour(String.valueOf(hourOfDay));
+            passedIntent2.setMinute(String.valueOf(minute));
+        } else {
+            eventReminder.setHour(String.valueOf(hourOfDay));
+            eventReminder.setMinute(String.valueOf(minute));
+        }
 
         time.setText(hourOfDay + ":" + minute);
     }

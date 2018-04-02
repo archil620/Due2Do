@@ -21,7 +21,7 @@
     <string name="calendarbtn">TODO</string>
 
     <string-array name="priority">
-        <item>High</item>
+        <item id="1">High</item>
         <item>Medium</item>
         <item>Low</item>
     </string-array>

@@ -57,7 +57,7 @@ public class UtilityClass {
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "CHANNEL_ID")
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.mipmap.app_icon_round)
                 .setContentTitle(task.getTask())
                 .setContentText("Your task is due. Complete it")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
