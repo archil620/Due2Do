@@ -93,20 +93,8 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                     deleteTask = reminderList.get(getAdapterPosition());
                     reminderList.remove(getAdapterPosition());
 
-                    Query deleteQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByChild(deleteTask.getId()).limitToLast(1);
-                    deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                String key = ds.getKey();
-                                mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(key).setValue(null);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(deleteTask.getKey());
+                    db1.setValue(null);
                     Toast.makeText(mCtx,"Deleted", Toast.LENGTH_SHORT).show();
                 }
             });

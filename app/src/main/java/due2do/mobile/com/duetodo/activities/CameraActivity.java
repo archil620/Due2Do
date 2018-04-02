@@ -96,7 +96,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
                 Intent displayTask = new Intent(CameraActivity.this,to_do.class);
                 displayTask.putExtra("Task", String.valueOf(cameraReminder.getTask()));
                 displayTask.putExtra("Task", String.valueOf(cameraReminder.getYear()));
-                displayTask.putExtra("Task", String.valueOf(cameraReminder.getMonth()));
+                displayTask.putExtra("Task", String.valueOf(cameraReminder.getMonth())+1);
                 displayTask.putExtra("Task", String.valueOf(cameraReminder.getDay()));
                 displayTask.putExtra("Task", String.valueOf(cameraReminder.getHour()));
                 displayTask.putExtra("Task", String.valueOf(cameraReminder.getMinute()));
@@ -122,7 +122,7 @@ public class CameraActivity extends AppCompatActivity implements DatePickerDialo
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
         cameraReminder.setYear(String.valueOf(datePicker.getYear()));
-        cameraReminder.setMonth(String.valueOf(datePicker.getMonth()));
+        cameraReminder.setMonth(String.valueOf(datePicker.getMonth())+1);
         cameraReminder.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
         final Calendar c = Calendar.getInstance();

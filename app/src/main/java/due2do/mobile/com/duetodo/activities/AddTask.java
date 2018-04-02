@@ -130,6 +130,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
             }
         });
@@ -226,17 +227,17 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
         if(passedIntent != null){
             passedIntent.setYear(String.valueOf(datePicker.getYear()));
-            passedIntent.setMonth(String.valueOf(datePicker.getMonth()));
+            passedIntent.setMonth(String.valueOf(datePicker.getMonth()+1));
             passedIntent.setDay(String.valueOf(datePicker.getDayOfMonth()));
         }else{
             task.setYear(String.valueOf(datePicker.getYear()));
-            task.setMonth(String.valueOf(datePicker.getMonth()));
+            task.setMonth(String.valueOf(datePicker.getMonth()+1));
             task.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
         }
 
 
-        date.setText(dayOfMonth + "/" + month + "/" + year);
+        date.setText(dayOfMonth + "/" + String.valueOf(month+1) + "/" + year);
 
     }
 
@@ -327,7 +328,9 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             /*Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             saveImage(imageBitmap,"saved");*/
+
             myBitmap = Bitmap.createScaledBitmap(myBitmap, 500, 500, false);
+            displayimage.setRotation(90);
             displayimage.setImageBitmap(myBitmap);
         }
 

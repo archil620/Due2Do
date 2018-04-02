@@ -21,7 +21,15 @@ public class Task implements Serializable {
     private String imageUri;
     ArrayList<String> contactList = new ArrayList<String>();
     private String location;
+    private String key;
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getImageUri() {
         return imageUri;

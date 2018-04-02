@@ -243,6 +243,7 @@ public class to_do extends AppCompatActivity {
                             if (cday.contains(d))
                             {
                                 reminder = ds.getValue(Task.class);
+                                reminder.setKey(ds.getKey());
                                 displayList.add(reminder);
                             }
                         }
