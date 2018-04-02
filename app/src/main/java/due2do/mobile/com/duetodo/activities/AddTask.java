@@ -64,14 +64,13 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     private FirebaseDatabase database;
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
-    private CameraReminder cameraReminder = new CameraReminder();
     TextView time, date;
     EditText taskName;
-    ImageButton image, location, contact, createTask;
+    ImageButton createTask;
     ImageView displayimage;
     Task task = new Task();
     Task passedIntent = new Task();
-    String storageImage;
+    String priority;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     private String[] galleryPermissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -82,6 +81,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     Map<String, String> flagValue = new HashMap<>();
     private StorageReference mStorageRef;
     Uri photoUri;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +108,14 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
         passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
 
-        if (passedIntent != null) {taskName.setText(passedIntent.getTask());
+        if (passedIntent != null) {
+            taskName.setText(passedIntent.getTask());
             date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
             time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
             FirebaseStorage storage = FirebaseStorage.getInstance("gs://due2do-app.appspot.com");
-            StorageReference ref =storage.getReferenceFromUrl(passedIntent.getImageUri());
+            StorageReference ref = storage.getReferenceFromUrl(passedIntent.getImageUri());
             try {
-                final File file = File.createTempFile("Images","JPG");
+                final File file = File.createTempFile("Images", "JPG");
                 ref.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -136,7 +137,6 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             //time.setText();
 
 
-
         }
 
 
@@ -146,7 +146,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        Spinner spinner = (Spinner) findViewById(R.id.priority);
+        spinner = (Spinner) findViewById(R.id.priority);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.priority, android.R.layout.simple_spinner_item);
@@ -191,6 +191,8 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         createTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                priority = spinner.getSelectedItem().toString();
+                task.setPriority(priority);
                 if (passedIntent != null) {
                     passedIntent.setTask(String.valueOf(taskName.getText()));
                     DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(passedIntent.getKey());
@@ -245,7 +247,6 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                         }
                     });
                 }
-
 
 
             }
@@ -334,13 +335,13 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         if (resultCode == RESULT_OK) {
 
             StorageReference filepath = mStorageRef.child(mUser.getUid()).child("CameraTask").child(photoUri.getLastPathSegment());
-            flagValue.put("Done","No");
-            Toast.makeText(this,"Image Uploading",Toast.LENGTH_SHORT).show();
+            flagValue.put("Done", "No");
+            Toast.makeText(this, "Image Uploading", Toast.LENGTH_SHORT).show();
             filepath.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    flagValue.put("Done","Yes");
-                    Toast.makeText(AddTask.this,"Image Uploaded",Toast.LENGTH_SHORT).show();
+                    flagValue.put("Done", "Yes");
+                    Toast.makeText(AddTask.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
                     task.setImageUri(String.valueOf(taskSnapshot.getDownloadUrl()));
                     Toast.makeText(AddTask.this, "Upload Successful!", Toast.LENGTH_SHORT).show();
                 }

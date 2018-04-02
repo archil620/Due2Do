@@ -22,6 +22,15 @@ public class Task implements Serializable {
     ArrayList<String> contactList = new ArrayList<String>();
     private String location;
     private String key;
+    private String priority;
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
 
     public String getKey() {
         return key;

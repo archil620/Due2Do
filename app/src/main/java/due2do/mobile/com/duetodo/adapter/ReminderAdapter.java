@@ -60,7 +60,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         final Task reminder = reminderList.get(position);
         holder.textViewTitle.setText(reminder.getTask());
         holder.textViewDate.setText(reminder.getDay()+"/"+reminder.getMonth()+"/"+reminder.getYear());
-        holder.textViewPriority.setText("High");
+        holder.textViewPriority.setText(reminder.getPriority());
     }
 
     @Override
