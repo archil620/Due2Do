@@ -20,7 +20,7 @@ Due 2 Do is design to boost your productivity and make your life easier.
 ## Installation Notes
 Minimum SDK version - 23 <br />
 Minimum CompileSKDversion - 26 <br />
-Device's GPS needs to be keep on. <br />
+Device's GPS needs to be keep on. (The app will crash if location service is not kept on, please try again!) <br />
 Application required will not run on emulator as it requires GPS, hence please intall on android phone.
 
 
