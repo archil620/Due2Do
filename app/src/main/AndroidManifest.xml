@@ -30,15 +30,6 @@
                 android:resource="@xml/provider_paths"></meta-data>
         </provider>
 
-        <activity android:name=".activities.StartActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.to_do" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -50,17 +41,27 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAfvURBhIfY7XD17ITT3OFx6EVmcaYNJzM" />
-        <activity android:name=".activities.create2" />
+
+        <!--Activities-->
+        <activity android:name=".activities.StartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.to_do" />
+        <activity android:name=".activities.LocationActivity" />
         <activity
             android:name="activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.AddTask" />
-        <activity android:name=".activities.SingleTask" />
-        <activity android:name=".activities.CameraActivity" />
-        <activity android:name=".activities.Event" />
+        <activity android:name=".activities.BasicTaskActivity" />
+        <activity android:name=".activities.EventActivity" />
+        <activity android:name=".activities.TrackStatus"/>
 
+        <!--Services-->
         <service
             android:name=".services.TrackLocationService" />
         <service android:name=".services.NotificationService"/>
@@ -71,7 +72,6 @@
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
             </intent-filter>
         </receiver>
-        <activity android:name=".activities.TrackStatus"></activity>
     </application>
 
 </manifest>

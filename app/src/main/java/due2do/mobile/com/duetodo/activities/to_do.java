@@ -1,6 +1,5 @@
 package due2do.mobile.com.duetodo.activities;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -8,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,12 +33,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.adapter.ReminderAdapter;
 import due2do.mobile.com.duetodo.model.Task;
 import due2do.mobile.com.duetodo.services.NotificationService;
 import due2do.mobile.com.duetodo.services.TrackLocationService;
+import due2do.mobile.com.duetodo.utils.AutoLoginReference;
 
 public class to_do extends AppCompatActivity {
 
@@ -207,21 +204,21 @@ public class to_do extends AppCompatActivity {
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(to_do.this, create2.class));
+                startActivity(new Intent(to_do.this, LocationActivity.class));
             }
         });
 
         camera_task.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(to_do.this,AddTask.class));
+                startActivity(new Intent(to_do.this,BasicTaskActivity.class));
             }
         });
 
         add_people.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(to_do.this,Event.class));
+                startActivity(new Intent(to_do.this,EventActivity.class));
             }
         });
     } //end of oncreate
@@ -345,6 +342,7 @@ public class to_do extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_signout){
             FirebaseAuth.getInstance().signOut();
+            AutoLoginReference.clearUsername(to_do.this);
             startActivity(new Intent(to_do.this, MainActivity.class));
         }
 

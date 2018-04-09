@@ -1,14 +1,10 @@
 package due2do.mobile.com.duetodo.activities;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,11 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,7 +40,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,12 +47,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import due2do.mobile.com.duetodo.model.CameraReminder;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.model.Task;
-import pub.devrel.easypermissions.EasyPermissions;
 
-public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class BasicTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
     TextView time, date;
@@ -82,7 +72,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task);
+        setContentView(R.layout.activity_basic_task);
 
         time = findViewById(R.id.storetime);
         date = findViewById(R.id.storedate);
@@ -126,7 +116,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                     });
 
                 } catch (IOException e) {
-                    Toast.makeText(AddTask.this, "Some error occured! Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BasicTaskActivity.this, "Some error occured! Please try again", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -146,7 +136,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         //Date Picker Dialog
         //https://stackoverflow.com/questions/6451837/how-do-i-set-the-current-date-in-a-datepicker
         datePickerDialog = new DatePickerDialog(
-                this, due2do.mobile.com.duetodo.activities.AddTask.this, currentYear, currentMonth, today);
+                this, BasicTaskActivity.this, currentYear, currentMonth, today);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,7 +146,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         });
 
         //Time picker dialog
-        timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.AddTask.this, hour, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog = new TimePickerDialog(this, BasicTaskActivity.this, hour, minute, DateFormat.is24HourFormat(this));
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,9 +174,9 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                         passedIntent.setTask(String.valueOf(taskName.getText()));
                         DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(passedIntent.getKey());
                         db1.setValue(passedIntent);
-                        Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BasicTaskActivity.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
-                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                        Intent displayTask = new Intent(BasicTaskActivity.this, to_do.class);
                         startActivity(displayTask);
 
                     }
@@ -214,18 +204,18 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                                 if (flagValue.size() >= 1) {
                                     if ((flagValue.get("Done")).equals("Yes")) {
                                         mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
-                                        Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(BasicTaskActivity.this, "Task Created", Toast.LENGTH_SHORT).show();
 
-                                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                                        Intent displayTask = new Intent(BasicTaskActivity.this, to_do.class);
                                         startActivity(displayTask);
                                     } else {
-                                        Toast.makeText(AddTask.this, "Image Still Uploading", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(BasicTaskActivity.this, "Image Still Uploading", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     mDatabaseReference.child(mUser.getUid()).child("CameraTask").push().setValue(task);
-                                    Toast.makeText(due2do.mobile.com.duetodo.activities.AddTask.this, "Task Created", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(BasicTaskActivity.this, "Task Created", Toast.LENGTH_SHORT).show();
 
-                                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
+                                    Intent displayTask = new Intent(BasicTaskActivity.this, to_do.class);
                                     startActivity(displayTask);
                                 }
                             }
@@ -314,11 +304,11 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     flagValue.put("Done", "Yes");
-                    Toast.makeText(AddTask.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BasicTaskActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
                     task.setImageUri(String.valueOf(taskSnapshot.getDownloadUrl()));
                     Bitmap bitmap = null;
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(AddTask.this.getContentResolver(), photoUri);
+                        bitmap = MediaStore.Images.Media.getBitmap(BasicTaskActivity.this.getContentResolver(), photoUri);
                         displayimage.setImageBitmap(bitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -327,7 +317,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddTask.this, "Some error occured! Please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BasicTaskActivity.this, "Some error occured! Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
 

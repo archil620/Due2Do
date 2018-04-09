@@ -2,7 +2,6 @@ package due2do.mobile.com.duetodo.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -21,7 +20,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -37,11 +35,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import due2do.mobile.com.duetodo.model.EventReminder;
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.model.Task;
 
-public class Event extends ListActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class EventActivity extends ListActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     TextView time, date;
     ImageButton createtask;
@@ -90,7 +87,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
 
         //Date Picker Dialog
         datePickerDialog = new DatePickerDialog(
-                this, due2do.mobile.com.duetodo.activities.Event.this, currentYear, currentMonth, today);
+                this, EventActivity.this, currentYear, currentMonth, today);
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +98,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         });
 
         //Time picker dialog
-        timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.Event.this, hour, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog = new TimePickerDialog(this, EventActivity.this, hour, minute, DateFormat.is24HourFormat(this));
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,9 +159,9 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                         passedIntent.setTask(String.valueOf(eventName.getText()));
                         DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("EventTask").child(passedIntent.getKey());
                         db1.setValue(passedIntent);
-                        Toast.makeText(due2do.mobile.com.duetodo.activities.Event.this, "Task Updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventActivity.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
-                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
+                        Intent displayTask = new Intent(EventActivity.this, to_do.class);
                         startActivity(displayTask);
 
 
@@ -216,7 +213,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                             }
                         });
 
-                        Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
+                        Intent displayTask = new Intent(EventActivity.this, to_do.class);
                         startActivity(displayTask);
                     }
                 } else {

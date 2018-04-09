@@ -1,6 +1,5 @@
 package due2do.mobile.com.duetodo.activities;
 
-import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,9 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -46,11 +42,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 import due2do.mobile.com.duetodo.R;
-import due2do.mobile.com.duetodo.model.LocationModel;
 import due2do.mobile.com.duetodo.model.Task;
 import due2do.mobile.com.duetodo.services.TrackLocationService;
 
-public class create2 extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class LocationActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private GoogleMap mMap;
     private EditText taskName;
@@ -79,7 +74,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create2);
+        setContentView(R.layout.activity_location);
 
 
         setTitle("Create Location Task");
@@ -112,7 +107,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
 
         //https://stackoverflow.com/questions/6451837/how-do-i-set-the-current-date-in-a-datepicker
         datePickerDialog = new DatePickerDialog(
-                this, due2do.mobile.com.duetodo.activities.create2.this, currentYear, currentMonth, today);
+                this, LocationActivity.this, currentYear, currentMonth, today);
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +119,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
-        timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.create2.this, hour, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog = new TimePickerDialog(this, LocationActivity.this, hour, minute, DateFormat.is24HourFormat(this));
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,11 +225,11 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                     passedIntent.setTask(String.valueOf(taskName.getText()));
                     DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("LocationBased").child(passedIntent.getKey());
                     db1.setValue(passedIntent);
-                    Toast.makeText(due2do.mobile.com.duetodo.activities.create2.this, "Task Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LocationActivity.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
 
                     taskId = passedIntent.getKey();
-                    Intent intent = new Intent(create2.this, TrackLocationService.class);
+                    Intent intent = new Intent(LocationActivity.this, TrackLocationService.class);
                     intent.putExtra("TaskName",taskName.getText().toString());
                     intent.putExtra("TaskId",taskId);
                     intent.putExtra("Day",model.getDay());
@@ -244,7 +239,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                     intent.putExtra("Day",model.getHour());
                     startService(intent);
 
-                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.create2.this, to_do.class);
+                    Intent displayTask = new Intent(LocationActivity.this, to_do.class);
                     startActivity(displayTask);
 
                 }else{
@@ -271,8 +266,8 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                             mDatabaseReference.setValue(model);
 
 
-                            Toast.makeText(create2.this, "Task Added",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(create2.this, TrackLocationService.class);
+                            Toast.makeText(LocationActivity.this, "Task Added",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LocationActivity.this, TrackLocationService.class);
                             intent.putExtra("TaskName",taskName.getText().toString());
                             intent.putExtra("TaskId",taskId);
                             intent.putExtra("Day",model.getDay());
@@ -282,7 +277,7 @@ public class create2 extends FragmentActivity implements OnMapReadyCallback, Dat
                             intent.putExtra("Hour",model.getHour());
                             startService(intent);
 
-                            Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.create2.this, to_do.class);
+                            Intent displayTask = new Intent(LocationActivity.this, to_do.class);
                             startActivity(displayTask);
 
                         }
