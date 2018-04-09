@@ -76,7 +76,7 @@ public class to_do extends AppCompatActivity {
         camera_task = findViewById(R.id.camera_btn);
         location = findViewById(R.id.location_btn);
         add_people = findViewById(R.id.add_people_btn);
-        done_task = findViewById(R.id.done_btn);
+        //done_task = findViewById(R.id.done_btn);
         fabopen = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation);
         fabclose= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation_close);
         fabrotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
@@ -177,11 +177,11 @@ public class to_do extends AppCompatActivity {
                     location.startAnimation(fabclose);
                     camera_task.startAnimation(fabclose);
                     add_people.startAnimation(fabclose);
-                    done_task.startAnimation(fabclose);
+                    //done_task.startAnimation(fabclose);
                     location.setClickable(false);
                     camera_task.setClickable(false);
                     add_people.setClickable(false);
-                    done_task.setClickable(false);
+                    //done_task.setClickable(false);
                     isopen=false;
 
                 }else {
@@ -189,12 +189,12 @@ public class to_do extends AppCompatActivity {
                     location.startAnimation(fabopen);
                     camera_task.startAnimation(fabopen);
                     add_people.startAnimation(fabopen);
-                    done_task.startAnimation(fabopen);
+                    //done_task.startAnimation(fabopen);
 
                     location.setClickable(true);
                     camera_task.setClickable(true);
                     add_people.setClickable(true);
-                    done_task.setClickable(true);
+                    //done_task.setClickable(true);
                     isopen=true;
                 }
             }

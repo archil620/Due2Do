@@ -58,6 +58,14 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         holder.textViewTitle.setText(reminder.getTask());
         holder.textViewDate.setText(reminder.getDay() + "/" + reminder.getMonth() + "/" + reminder.getYear());
         holder.textViewPriority.setText(reminder.getPriority());
+
+        if(reminder.getId().contains("C")){
+            holder.image.setBackgroundResource(R.drawable.ic_camera);
+        }else if(reminder.getId().contains("L")){
+            holder.image.setBackgroundResource(R.drawable.ic_location);
+        }else{
+            holder.image.setBackgroundResource(R.drawable.ic_group);
+        }
     }
 
     @Override
