@@ -179,6 +179,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                 if (taskName.getText().toString().length() != 0 && date.getText().toString().length() != 0) {
                     priority = spinner.getSelectedItem().toString();
                     task.setPriority(priority);
+                    //Update
                     if (passedIntent != null) {
                         passedIntent.setTask(String.valueOf(taskName.getText()));
                         DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("CameraTask").child(passedIntent.getKey());
@@ -188,7 +189,9 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                         Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.AddTask.this, to_do.class);
                         startActivity(displayTask);
 
-                    } else {
+                    }
+                    //Create
+                    else {
                         createQuery = mDatabaseReference.child(mUser.getUid()).child("CameraTask").orderByKey().limitToLast(1);
                         createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                             Task reminder = new Task();

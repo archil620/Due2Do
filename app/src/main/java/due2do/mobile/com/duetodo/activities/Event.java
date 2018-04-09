@@ -44,11 +44,11 @@ import due2do.mobile.com.duetodo.model.Task;
 public class Event extends ListActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     TextView time, date;
-    ImageButton btn, createtask;
+    ImageButton createtask;
     private final int REQUEST_CODE = 99;
     EditText eventName, location;
     ImageButton btPick;
-    Task passedIntent2 = new Task();
+    Task passedIntent = new Task();
     String priority;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -70,7 +70,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         time = findViewById(R.id.storetime);
         date = findViewById(R.id.storedate);
         eventName = findViewById(R.id.taskname);
-        btn = findViewById(R.id.cal);
+        //btn = findViewById(R.id.cal);
         btPick = findViewById(R.id.btnpick_contact);
         location = (EditText) findViewById(R.id.meeting);
         createtask = findViewById(R.id.createtask);
@@ -80,12 +80,15 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                 contactList);
         setListAdapter(adapter);
 
+        //Calendar Defaults
         Calendar c = Calendar.getInstance();
         int currentYear = c.get(Calendar.YEAR);
         int currentMonth = c.get(Calendar.MONTH);
         final int today = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
-
+        //Date Picker Dialog
         datePickerDialog = new DatePickerDialog(
                 this, due2do.mobile.com.duetodo.activities.Event.this, currentYear, currentMonth, today);
 
@@ -97,9 +100,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
             }
         });
 
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-
+        //Time picker dialog
         timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.Event.this, hour, minute, DateFormat.is24HourFormat(this));
 
         time.setOnClickListener(new View.OnClickListener() {
@@ -122,24 +123,21 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //Spinner Initialization
         spinner = (Spinner) findViewById(R.id.priority);
-        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> spinneradapter = ArrayAdapter.createFromResource(this,
                 R.array.priority, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
         spinneradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         spinner.setAdapter(spinneradapter);
 
-        passedIntent2 = (Task) getIntent().getSerializableExtra("clickedData");
-
-        if (passedIntent2 != null) {
-
-            eventName.setText(passedIntent2.getTask());
-            date.setText(passedIntent2.getDay() + "/" + passedIntent2.getMonth() + "/" + passedIntent2.getYear());
-            time.setText(passedIntent2.getHour() + ":" + passedIntent2.getMinute());
-            location.setText(passedIntent2.getLocation());
-            contactList = passedIntent2.getContactList();
+        //Show data when task opened
+        passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
+        if (passedIntent != null) {
+            eventName.setText(passedIntent.getTask());
+            date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
+            time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
+            location.setText(passedIntent.getLocation());
+            contactList = passedIntent.getContactList();
 
             adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1,
@@ -148,27 +146,31 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         }
 
 
+        //Create or update task operations
         createtask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (location.getText().toString().length() != 0 && eventName.getText().toString().length() != 0) {
                     //String phoneNo =txtPhoneNo.getText().toString();
 
-                    if (passedIntent2 != null) {
+                    //Update
+                    if (passedIntent != null) {
                         priority = spinner.getSelectedItem().toString();
-                        passedIntent2.setPriority(priority);
-                        passedIntent2.setTask(String.valueOf(eventName.getText()));
-                        passedIntent2.setLocation(String.valueOf(location.getText()));
-                        passedIntent2.setTask(String.valueOf(eventName.getText()));
-                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("EventTask").child(passedIntent2.getKey());
-                        db1.setValue(passedIntent2);
+                        passedIntent.setPriority(priority);
+                        passedIntent.setTask(String.valueOf(eventName.getText()));
+                        passedIntent.setLocation(String.valueOf(location.getText()));
+                        passedIntent.setTask(String.valueOf(eventName.getText()));
+                        DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("EventTask").child(passedIntent.getKey());
+                        db1.setValue(passedIntent);
                         Toast.makeText(due2do.mobile.com.duetodo.activities.Event.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
                         Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
                         startActivity(displayTask);
 
 
-                    } else {
+                    }
+                    //Create
+                    else {
                         priority = spinner.getSelectedItem().toString();
                         eventReminder.setPriority(priority);
                         eventReminder.setTask(String.valueOf(eventName.getText()));
@@ -187,8 +189,6 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                                 Toast.makeText(getApplicationContext(), "Phone or message field is empty", Toast.LENGTH_SHORT).show();
                             }
                         }
-
-
                         createQuery = mDatabaseReference.child(mUser.getUid()).child("EventTask").orderByKey().limitToLast(1);
                         createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                             Task reminder = new Task();
@@ -218,7 +218,6 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
 
                         Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.Event.this, to_do.class);
                         startActivity(displayTask);
-
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter all fields", Toast.LENGTH_SHORT).show();
@@ -227,6 +226,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         });
     }
 
+    //Send message functionlaity
     public void sendMessage(String phoneNo, String message) {
         //https://stackoverflow.com/questions/40861846/android-get-phone-number-from-contact-list
         try {
@@ -239,6 +239,7 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         }
     }
 
+    //Pick contacts operations
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         int flag = 0;
@@ -282,8 +283,8 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
                             }
                         }
                     }
-                    if (passedIntent2 != null) {
-                        passedIntent2.setContactList(contactList);
+                    if (passedIntent != null) {
+                        passedIntent.setContactList(contactList);
                     } else {
                         eventReminder.setContactList(contactList);
                     }
@@ -293,34 +294,33 @@ public class Event extends ListActivity implements DatePickerDialog.OnDateSetLis
         }
     }
 
+    //Post Date picker operations
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        if (passedIntent2 != null) {
-            passedIntent2.setYear(String.valueOf(datePicker.getYear()));
-            passedIntent2.setMonth(String.valueOf(datePicker.getMonth() + 1));
-            passedIntent2.setDay(String.valueOf(datePicker.getDayOfMonth()));
+        if (passedIntent != null) {
+            passedIntent.setYear(String.valueOf(datePicker.getYear()));
+            passedIntent.setMonth(String.valueOf(datePicker.getMonth() + 1));
+            passedIntent.setDay(String.valueOf(datePicker.getDayOfMonth()));
         } else {
             eventReminder.setYear(String.valueOf(datePicker.getYear()));
             eventReminder.setMonth(String.valueOf(datePicker.getMonth() + 1));
             eventReminder.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
         }
-
-
         date.setText(dayOfMonth + "/" + String.valueOf(month + 1) + "/" + year);
 
     }
 
+    //Post time picker operations
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        if (passedIntent2 != null) {
-            passedIntent2.setHour(String.valueOf(hourOfDay));
-            passedIntent2.setMinute(String.valueOf(minute));
+        if (passedIntent != null) {
+            passedIntent.setHour(String.valueOf(hourOfDay));
+            passedIntent.setMinute(String.valueOf(minute));
         } else {
             eventReminder.setHour(String.valueOf(hourOfDay));
             eventReminder.setMinute(String.valueOf(minute));
         }
-
         time.setText(hourOfDay + ":" + minute);
     }
 }
