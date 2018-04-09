@@ -10,7 +10,7 @@ import android.content.Intent;
  */
 
 public class AppBroadcastReceiver extends BroadcastReceiver {
-    private static final String TAG = "intenttest.mc.com.intenttest";
+    private static final String TAG = "due2do.mobile.com.duetodo";
 
     @Override
     public void onReceive(Context context, Intent intent) {

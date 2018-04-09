@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * Created by Archil on 2018-02-10.
  */
 
+//Class for all task implementation
 public class Task implements Serializable {
 
     private String id;

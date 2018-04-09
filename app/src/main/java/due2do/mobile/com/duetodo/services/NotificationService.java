@@ -26,6 +26,7 @@ import due2do.mobile.com.duetodo.utils.UtilityClass;
  * Created by Bhargav Dalal on 01/04/2018.
  */
 
+//Service for notification of to-do
 public class NotificationService extends Service {
 
     private static final String TAG = "due2do.mobile.com.duetodo";
@@ -59,6 +60,7 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        //Firebase initialization
         firebaseAuth = FirebaseAuth.getInstance();
         mUser = firebaseAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -66,11 +68,11 @@ public class NotificationService extends Service {
 
         final Date currentTime = Calendar.getInstance().getTime();
 
-        Log.i(TAG, "Service is doing something");
         final Calendar cal = Calendar.getInstance();
         readRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //For camera task
                 for (DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()) {
                     camrem = ds.getValue(Task.class);
                     date = camrem.getDay() + "/" + camrem.getMonth() + "/" + camrem.getYear() + " " + camrem.getHour() + ":" + camrem.getMinute();
@@ -87,24 +89,6 @@ public class NotificationService extends Service {
                             UtilityClass utilityClass = new UtilityClass();
                             utilityClass.NotificationManager(NotificationService.this, camrem);
                         }
-                    }
-                }
-
-                for (DataSnapshot ds : dataSnapshot.child("SimpleTask").getChildren()) {
-                    camrem = ds.getValue(Task.class);
-                    Log.i(TAG, "Inside SimpleTask");
-                    date = camrem.getDay() + "/" + camrem.getMonth() + "/" + camrem.getYear() + " " + camrem.getHour() + ":" + camrem.getMinute();
-                    try {
-                        storedDate = dateFormat.parse(date);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    diff = storedDate.getTime() - currentTime.getTime();
-
-                    if ((diff < 900000) && (diff > 0)) {
-                        UtilityClass utilityClass = new UtilityClass();
-                        utilityClass.NotificationManager(NotificationService.this, camrem);
                     }
                 }
             }

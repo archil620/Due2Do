@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by Abhi on 2018-03-19.
  */
 
+//class for event to-do list
 public class EventReminder {
     private String task, hour, minute, year, month, day, location;
     ArrayList<String> contactList = new ArrayList<String>();

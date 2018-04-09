@@ -131,13 +131,15 @@ public class to_do extends AppCompatActivity {
         PowerManager.WakeLock wakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLock");
         wakeLock.acquire();
 
+        //Intent for Notification service
         Intent intent = new Intent(this, NotificationService.class);
         PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
 
+        //Intent for track location service
         Intent locationintent = new Intent(this, TrackLocationService.class);
         PendingIntent pendinglocIntent = PendingIntent.getService(this, 0, locationintent, 0);
 
-
+        //Alarm Manager to start notification and track location services
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -169,8 +171,6 @@ public class to_do extends AppCompatActivity {
         String uid = user.getUid();
         String name = user.getDisplayName(); // https://stackoverflow.com/questions/42056333/getting-user-name-lastname-and-id-in-firebase
         username.setText(name);
-
-
 
         add_task.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,6 +249,7 @@ public class to_do extends AppCompatActivity {
     }
 
 
+    //Show data display
     private void displayData(Calendar c) {
         recyclerView = (RecyclerView) findViewById(R.id.recylerView);
         recyclerView.setHasFixedSize(true);
@@ -265,6 +266,7 @@ public class to_do extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 displayList.clear();
+                //To show camera based task
                 for(DataSnapshot ds : dataSnapshot.child("CameraTask").getChildren()){
                     Task details = ds.getValue(Task.class);
                     String m = details.getMonth();
@@ -284,6 +286,7 @@ public class to_do extends AppCompatActivity {
                     }
                 }
 
+                //To show event based task
                 for(DataSnapshot ds : dataSnapshot.child("EventTask").getChildren()){
                     Task details = ds.getValue(Task.class);
                     String m = details.getMonth();
@@ -302,7 +305,7 @@ public class to_do extends AppCompatActivity {
                     }
 
                 }
-
+                //To show location based task
                 for(DataSnapshot ds : dataSnapshot.child("LocationBased").getChildren()){
                     Task details = ds.getValue(Task.class);
                     String m = details.getMonth();
@@ -319,6 +322,7 @@ public class to_do extends AppCompatActivity {
                         }
                     }
                 }
+                //Adapter for showing the task
                 adapter = new ReminderAdapter(to_do.this, displayList);
                 recyclerView.setAdapter(adapter);
             }
@@ -336,6 +340,7 @@ public class to_do extends AppCompatActivity {
         return true;
     }
 
+    //Sign out button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_signout){

@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by rahul on 2018-04-01.
  */
 
+//Class for location to-do list
 public class LocationModel {
 
     private String taskName;

@@ -61,7 +61,6 @@ import due2do.mobile.com.duetodo.model.Task;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private FirebaseDatabase database;
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mUser;
     TextView time, date;
@@ -70,14 +69,11 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
     ImageView displayimage;
     Task task = new Task();
     Task passedIntent = new Task();
-    String priority;
+    String priority, mCurrentPhotoPath;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
-    private String[] galleryPermissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    String mCurrentPhotoPath;
-    boolean flag = false;
-    Bitmap myBitmap;
-    Query createQuery, updateQuery;
+    Bitmap cameraBitmap;
+    Query createQuery;
     Map<String, String> flagValue = new HashMap<>();
     private StorageReference mStorageRef;
     Uri photoUri;
@@ -88,32 +84,29 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        database = FirebaseDatabase.getInstance();
         time = findViewById(R.id.storetime);
         date = findViewById(R.id.storedate);
-        //image = findViewById(R.id.image);
         createTask = findViewById(R.id.createtask);
         taskName = findViewById(R.id.taskname);
         displayimage = findViewById(R.id.displayimage);
 
+        //Calendar Defaults
         Calendar c = Calendar.getInstance();
         int currentYear = c.get(Calendar.YEAR);
         int currentMonth = c.get(Calendar.MONTH);
         final int today = c.get(Calendar.DAY_OF_MONTH);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
-        //storageImage = "cam" + currentYear + currentMonth + today + hour + minute;
-
+        //Show data when task opened
         mStorageRef = FirebaseStorage.getInstance("gs://due2do-app.appspot.com").getReference();
-
-
         passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
-
         if (passedIntent != null) {
             taskName.setText(passedIntent.getTask());
             date.setText(passedIntent.getDay() + "/" + passedIntent.getMonth() + "/" + passedIntent.getYear());
             time.setText(passedIntent.getHour() + ":" + passedIntent.getMinute());
             FirebaseStorage storage = FirebaseStorage.getInstance("gs://due2do-app.appspot.com");
-            if(passedIntent.getImageUri() != null){
+            if (passedIntent.getImageUri() != null) {
                 StorageReference ref = storage.getReferenceFromUrl(passedIntent.getImageUri());
 
                 try {
@@ -121,9 +114,9 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                     ref.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                            myBitmap = Bitmap.createScaledBitmap(myBitmap, 500, 500, false);
-                            displayimage.setImageBitmap(myBitmap);
+                            cameraBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                            cameraBitmap = Bitmap.createScaledBitmap(cameraBitmap, 500, 500, false);
+                            displayimage.setImageBitmap(cameraBitmap);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -133,33 +126,27 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                     });
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Toast.makeText(AddTask.this, "Some error occured! Please try again", Toast.LENGTH_SHORT).show();
                 }
-
             }
-            //time.setText();
         }
 
-
+        //Database Initializaiton
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         mUser = firebaseAuth.getCurrentUser();
-
-
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        //Spinner Initialization
         spinner = (Spinner) findViewById(R.id.priority);
-        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.priority, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        //Date Picker Dialog
         //https://stackoverflow.com/questions/6451837/how-do-i-set-the-current-date-in-a-datepicker
         datePickerDialog = new DatePickerDialog(
                 this, due2do.mobile.com.duetodo.activities.AddTask.this, currentYear, currentMonth, today);
-
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,11 +155,8 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             }
         });
 
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-
+        //Time picker dialog
         timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.AddTask.this, hour, minute, DateFormat.is24HourFormat(this));
-
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,19 +164,19 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             }
         });
 
-
+        //Capture Image
         displayimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //https://demonuts.com/pick-image-gallery-camera-android/
-                showPictureDialog();
+                takePhotoFromCamera();
             }
         });
 
+        //Create or update task operations
         createTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(taskName.getText().toString().length() != 0 && date.getText().toString().length() != 0){
+                if (taskName.getText().toString().length() != 0 && date.getText().toString().length() != 0) {
                     priority = spinner.getSelectedItem().toString();
                     task.setPriority(priority);
                     if (passedIntent != null) {
@@ -249,19 +233,15 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                             }
                         });
                     }
-
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Task name and date required", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
-
     }
 
 
+    //Post Date picker operations
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
 
@@ -275,13 +255,12 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
             task.setDay(String.valueOf(datePicker.getDayOfMonth()));
 
         }
-
-
         date.setText(dayOfMonth + "/" + String.valueOf(month + 1) + "/" + year);
 
     }
 
 
+    //Post time picker operations
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
@@ -296,12 +275,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         time.setText(hourOfDay + ":" + minute);
     }
 
-    private void showPictureDialog() {
-            takePhotoFromCamera();
-
-
-    }
-
+    //Capture image function
     private void takePhotoFromCamera() {
         Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -313,7 +287,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-
+                Toast.makeText(this, "Please try again", Toast.LENGTH_SHORT).show();
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -326,6 +300,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
         }
     }
 
+    //Post capture image functions
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
 
@@ -338,12 +313,18 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
                     flagValue.put("Done", "Yes");
                     Toast.makeText(AddTask.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
                     task.setImageUri(String.valueOf(taskSnapshot.getDownloadUrl()));
-                    Toast.makeText(AddTask.this, "Upload Successful!", Toast.LENGTH_SHORT).show();
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(AddTask.this.getContentResolver(), photoUri);
+                        displayimage.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddTask.this, "Upload Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddTask.this, "Some error occured! Please try again", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -351,26 +332,7 @@ public class AddTask extends AppCompatActivity implements DatePickerDialog.OnDat
 
     }
 
-    private void saveImage(Bitmap finalBitmap, String image_name) {
-
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root);
-        myDir.mkdirs();
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + ".jpg";
-        File file = new File(myDir, imageFileName);
-        if (file.exists()) file.delete();
-        task.setImageUri(file.toString());
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    //Create and store image file
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

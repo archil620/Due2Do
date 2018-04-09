@@ -64,14 +64,6 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
         holder.textViewTitle.setText(reminder.getTask());
         holder.textViewDate.setText(reminder.getDay()+"/"+reminder.getMonth()+"/"+reminder.getYear());
         holder.textViewPriority.setText(reminder.getPriority());
-
-        if(reminder.getId().contains("C")){
-            holder.image.setBackgroundResource(R.drawable.ic_camera);
-        }else if(reminder.getId().contains("L")){
-            holder.image.setBackgroundResource(R.drawable.ic_location);
-        }else{
-            holder.image.setBackgroundResource(R.drawable.ic_group);
-        }
     }
 
     @Override
@@ -102,6 +94,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                     mDatabaseReference = FirebaseDatabase.getInstance().getReference();
                     final FirebaseUser mUser = firebaseAuth.getCurrentUser();
                     Task deleteTask = new Task();
+                    //Delete task from list and database
                     deleteTask = reminderList.get(getAdapterPosition());
                     reminderList.remove(getAdapterPosition());
 
@@ -120,6 +113,7 @@ public class ReminderAdapter extends RecyclerView.Adapter<ReminderAdapter.Remind
                 }
             });
 
+            //Edit task based on the functionality i.e. Camera, Event or Location
             editEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

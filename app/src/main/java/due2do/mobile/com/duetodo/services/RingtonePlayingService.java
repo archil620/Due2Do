@@ -26,6 +26,7 @@ public class RingtonePlayingService extends Service
         return null;
     }
 
+    // Play ringtone
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
@@ -37,6 +38,7 @@ public class RingtonePlayingService extends Service
         return START_NOT_STICKY;
     }
 
+    // Stop ringtone
     @Override
     public void onDestroy()
     {

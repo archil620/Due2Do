@@ -41,21 +41,17 @@ public class UtilityClass {
     private static final String TAG = "due2do.mobile.com.duetodo";
     Task camrem = new Task();
 
+    //Code for notification builder
     public void NotificationManager(Context context, Task task){
 
         Intent intent = new Intent(context, to_do.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-        /*Ringtone r = RingtoneManager.getRingtone(context, notification);
-        */
         Intent stopIntent = new Intent(context, AppBroadcastReceiver.class);
         PendingIntent stopPendingIntent =
                 PendingIntent.getBroadcast(context, 0, stopIntent, 0);
-
-
-
+        //Notification settings
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "CHANNEL_ID")
                 .setSmallIcon(R.mipmap.app_icon_round)
                 .setContentTitle(task.getTask())
@@ -71,6 +67,8 @@ public class UtilityClass {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(101, mBuilder.build());
         Log.i(TAG, "Inside Utility");
+
+        //Vibration services
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
 
@@ -97,11 +95,7 @@ public class UtilityClass {
             }
         }
 
-
-
-        //r.play();
         Intent startIntent = new Intent(context, RingtonePlayingService.class);
-        //startIntent.putExtra("ringtone-uri", notification);
         context.startService(startIntent);
 
     }

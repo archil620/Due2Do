@@ -11,6 +11,7 @@ import due2do.mobile.com.duetodo.utils.AutoLoginReference;
  * Created by Ankit Varshney on 28/03/2018.
  */
 
+//Activity to show the login page or the home page
 public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
