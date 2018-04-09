@@ -140,7 +140,7 @@
             android:layout_marginTop="15dp"
             android:layout_height="250dp"
             android:layout_centerHorizontal="true"
-            tools:context="due2do.mobile.com.duetodo.activities.LocationActivity" />
+            tools:context="due2do.mobile.com.duetodo.activities.create2" />
 
         <Button
             android:id="@+id/clearTaskBtn"

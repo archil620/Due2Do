@@ -1,5 +1,6 @@
 package due2do.mobile.com.duetodo.activities;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -12,11 +13,16 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -42,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 import due2do.mobile.com.duetodo.R;
+import due2do.mobile.com.duetodo.model.LocationModel;
 import due2do.mobile.com.duetodo.model.Task;
 import due2do.mobile.com.duetodo.services.TrackLocationService;
 
@@ -70,6 +77,8 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     private DatabaseReference mDatabaseReference;
     LatLng oldlatLng;
     private String taskId;
+    Spinner spinner;
+    String priority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +104,14 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         final int today = c.get(Calendar.DAY_OF_MONTH);
 
         passedIntent = (Task) getIntent().getSerializableExtra("clickedData");
+        spinner = (Spinner) findViewById(R.id.priority);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.priority, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
         if(passedIntent != null){
             taskName.setText(passedIntent.getTask());
@@ -107,11 +124,12 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
 
         //https://stackoverflow.com/questions/6451837/how-do-i-set-the-current-date-in-a-datepicker
         datePickerDialog = new DatePickerDialog(
-                this, LocationActivity.this, currentYear, currentMonth, today);
+                this, due2do.mobile.com.duetodo.activities.LocationActivity.this, currentYear, currentMonth, today);
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
             }
         });
@@ -119,7 +137,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
-        timePickerDialog = new TimePickerDialog(this, LocationActivity.this, hour, minute, DateFormat.is24HourFormat(this));
+        timePickerDialog = new TimePickerDialog(this, due2do.mobile.com.duetodo.activities.LocationActivity.this, hour, minute, DateFormat.is24HourFormat(this));
 
         time.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,10 +240,12 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
 
 
                 if(passedIntent != null){
+                    priority = spinner.getSelectedItem().toString();
+                    model.setPriority(priority);
                     passedIntent.setTask(String.valueOf(taskName.getText()));
                     DatabaseReference db1 = mDatabaseReference.child(mUser.getUid()).child("LocationBased").child(passedIntent.getKey());
                     db1.setValue(passedIntent);
-                    Toast.makeText(LocationActivity.this, "Task Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(due2do.mobile.com.duetodo.activities.LocationActivity.this, "Task Updated", Toast.LENGTH_SHORT).show();
 
 
                     taskId = passedIntent.getKey();
@@ -239,10 +259,12 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                     intent.putExtra("Day",model.getHour());
                     startService(intent);
 
-                    Intent displayTask = new Intent(LocationActivity.this, to_do.class);
+                    Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.LocationActivity.this, to_do.class);
                     startActivity(displayTask);
 
                 }else{
+                    priority = spinner.getSelectedItem().toString();
+                    model.setPriority(priority);
                     createQuery = mDatabaseReference.child(mUser.getUid()).child("LocationBased").orderByKey().limitToLast(1);
 
                     createQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -277,7 +299,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                             intent.putExtra("Hour",model.getHour());
                             startService(intent);
 
-                            Intent displayTask = new Intent(LocationActivity.this, to_do.class);
+                            Intent displayTask = new Intent(due2do.mobile.com.duetodo.activities.LocationActivity.this, to_do.class);
                             startActivity(displayTask);
 
                         }
@@ -320,7 +342,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         }
 
 
-        date.setText(i + "/" + i1 + "/" + i2);
+        date.setText(i + "/" + (i1+1) + "/" + i2);
 
     }
 

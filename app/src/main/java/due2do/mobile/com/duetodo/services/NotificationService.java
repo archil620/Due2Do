@@ -102,4 +102,9 @@ public class NotificationService extends Service {
         return Service.START_STICKY;
     }
 
+    @Override
+    public void onDestroy() {
+        stopSelf();
+    }
+
 }

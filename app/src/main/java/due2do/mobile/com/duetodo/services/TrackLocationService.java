@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,12 +26,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import due2do.mobile.com.duetodo.R;
 import due2do.mobile.com.duetodo.activities.TrackStatus;
+import due2do.mobile.com.duetodo.activities.LocationActivity;
 import due2do.mobile.com.duetodo.model.Task;
 
 public class TrackLocationService extends Service {

@@ -331,22 +331,4 @@ public class to_do extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action, menu);
-        return true;
-    }
-
-    //Sign out button
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_signout){
-            FirebaseAuth.getInstance().signOut();
-            AutoLoginReference.clearUsername(to_do.this);
-            startActivity(new Intent(to_do.this, MainActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 }
